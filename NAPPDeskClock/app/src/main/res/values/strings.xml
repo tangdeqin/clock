@@ -25,6 +25,8 @@
 
     <!-- Setting label on Set alarm screen: Label -->
     <string name="label">Label</string>
+    <string name="label_edit_ko">CANCEL</string>
+    <string name="label_edit_ok">OK</string>
 
     <!-- Default label to display for an alarm -->
     <string name="default_label">Alarm</string>
@@ -34,6 +36,8 @@
 
     <!-- Setting labels on Set alarm screen: Repeat -->
     <string name="alarm_repeat">Repeat</string>
+
+    <string name="alarm_edit_tile">Edit Alarm</string>
 
     <!-- Setting labels on Set alarm screen: Delete [CHAR LIMIT=15] -->
     <string name="delete">Delete</string>

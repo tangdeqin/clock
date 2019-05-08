@@ -70,7 +70,8 @@
         android:label="@string/app_label"
         android:requiredForAllUsers="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DeskClock">
+        android:theme="@style/Theme.DeskClock"
+        android:resizeableActivity="false">
 
         <!-- ============================================================== -->
         <!-- Main app components.                                           -->
@@ -80,7 +81,8 @@
             android:name=".DeskClock"
             android:label="@string/app_label"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -164,12 +166,15 @@
             android:showForAllUsers="true"
             android:showWhenLocked="true"
             android:taskAffinity=""
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity
             android:name=".AlarmSelectionActivity"
             android:label="@string/dismiss_alarm"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
+        <activity
+            android:name=".alarms.TimePickerActivity" />
 
         <provider
             android:name=".provider.ClockProvider"

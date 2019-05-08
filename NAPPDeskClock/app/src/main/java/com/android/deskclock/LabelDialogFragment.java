@@ -16,38 +16,41 @@
 
 package com.android.deskclock;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.deskclock.data.DataModel;
 import com.android.deskclock.data.Timer;
 import com.android.deskclock.provider.Alarm;
-
-import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE;
+import com.android.deskclock.R;
 
 /**
  * DialogFragment to edit label.
  */
-public class LabelDialogFragment extends DialogFragment {
+public class LabelDialogFragment extends DialogFragment implements View.OnClickListener {
 
     /**
      * The tag that identifies instances of LabelDialogFragment in the fragment manager.
@@ -59,10 +62,13 @@ public class LabelDialogFragment extends DialogFragment {
     private static final String ARG_TIMER_ID = "arg_timer_id";
     private static final String ARG_TAG = "arg_tag";
 
-    private AppCompatEditText mLabelBox;
+    private AppCompatEditText mLabelEditText;
     private Alarm mAlarm;
     private int mTimerId;
     private String mTag;
+    private TextView mCancelEditlabelTv;
+    private TextView mOkEditlabelTv;
+
 
     public static LabelDialogFragment newInstance(Alarm alarm, String label, String tag) {
         final Bundle args = new Bundle();
@@ -112,13 +118,47 @@ public class LabelDialogFragment extends DialogFragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         // As long as the label box exists, save its state.
-        if (mLabelBox != null) {
-            outState.putString(ARG_LABEL, mLabelBox.getText().toString());
+        if (mLabelEditText != null) {
+            outState.putString(ARG_LABEL, mLabelEditText.getText().toString());
         }
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
+        View view=inflater.inflate(R.layout.alarm_edit_label,container,false);
+        return view;
+    }
+    public void setEditLabelSize() {
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        Window window = getDialog().getWindow();
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.width = width/9*8;
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        window.setAttributes(layoutParams);
+    }
+    @Override
+    public void onStart(){
+        super.onStart();
+        setEditLabelSize();
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLabelEditText = view.findViewById(R.id.label_edit);
+        mCancelEditlabelTv = view.findViewById(R.id.label_edit_ko);
+        mOkEditlabelTv = view.findViewById(R.id.label_edit_ok);
+        mCancelEditlabelTv.setOnClickListener(this);
+        mOkEditlabelTv.setOnClickListener(this);
+
         final Bundle args = getArguments() == null ? Bundle.EMPTY : getArguments();
         mAlarm = args.getParcelable(ARG_ALARM);
         mTimerId = args.getInt(ARG_TIMER_ID, -1);
@@ -129,55 +169,40 @@ public class LabelDialogFragment extends DialogFragment {
             label = savedInstanceState.getString(ARG_LABEL, label);
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setPositiveButton(android.R.string.ok, new OkListener())
-                .setNegativeButton(android.R.string.cancel, null /* listener */)
-                .setMessage(R.string.label)
-                .create();
-        final Context context = dialog.getContext();
-
-        final int colorControlActivated =
-                ThemeUtils.resolveColor(context, R.attr.colorControlActivated);
-        final int colorControlNormal =
-                ThemeUtils.resolveColor(context, R.attr.colorControlNormal);
-
-        mLabelBox = new AppCompatEditText(context);
-        mLabelBox.setSupportBackgroundTintList(new ColorStateList(
-                new int[][] { { android.R.attr.state_activated }, {} },
-                new int[] { colorControlActivated, colorControlNormal }));
-        mLabelBox.setOnEditorActionListener(new ImeDoneListener());
-        mLabelBox.addTextChangedListener(new TextChangeListener());
-        mLabelBox.setSingleLine();
-        mLabelBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        mLabelBox.setText(label);
-        mLabelBox.selectAll();
-
-        // The line at the bottom of EditText is part of its background therefore the padding
-        // must be added to its container.
-        final int padding = context.getResources()
-                .getDimensionPixelSize(R.dimen.label_edittext_padding);
-        dialog.setView(mLabelBox, padding, 0, padding, 0);
-
-        final Window alertDialogWindow = dialog.getWindow();
-        if (alertDialogWindow != null) {
-            alertDialogWindow.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE);
-        }
-        return dialog;
+        mLabelEditText.setOnEditorActionListener(new ImeDoneListener());
+        mLabelEditText.addTextChangedListener(new TextChangeListener());
+        mLabelEditText.setSingleLine();
+        mLabelEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        mLabelEditText.setText(label);
+        mLabelEditText.selectAll();
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.label_edit_ko:
+                dismiss();
+                break;
+            case R.id.label_edit_ok:
+                setLabel();
+                dismiss();
+            break;
+            default:break;
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
         // Stop callbacks from the IME since there is no view to process them.
-        mLabelBox.setOnEditorActionListener(null);
+        mLabelEditText.setOnEditorActionListener(null);
     }
 
     /**
      * Sets the new label into the timer or alarm.
      */
     private void setLabel() {
-        String label = mLabelBox.getText().toString();
+        String label = mLabelEditText.getText().toString();
         if (label.trim().isEmpty()) {
             // Don't allow user to input label with only whitespace.
             label = "";
@@ -193,6 +218,7 @@ public class LabelDialogFragment extends DialogFragment {
         }
     }
 
+
     public interface AlarmLabelDialogHandler {
         void onDialogLabelSet(Alarm alarm, String label, String tag);
     }
@@ -203,7 +229,7 @@ public class LabelDialogFragment extends DialogFragment {
     private class TextChangeListener implements TextWatcher {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            mLabelBox.setActivated(!TextUtils.isEmpty(s));
+            mLabelEditText.setActivated(!TextUtils.isEmpty(s));
         }
 
         @Override
@@ -230,14 +256,4 @@ public class LabelDialogFragment extends DialogFragment {
         }
     }
 
-    /**
-     * Handles completing the label edit from the Ok button of the dialog.
-     */
-    private class OkListener implements DialogInterface.OnClickListener {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            setLabel();
-            dismiss();
-        }
-    }
 }

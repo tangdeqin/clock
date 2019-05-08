@@ -130,7 +130,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAlarmTimeClickHandler().onClockClicked(getItemHolder().item);
+                getAlarmTimeClickHandler().onClockClicked(context,getItemHolder().item);
             }
         });
         // Edit label handler

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@color/default_background">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/default_background">
+        <ImageView
+            android:id="@+id/backimagview"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_alignBottom="@+id/tiletextview"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="21dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/close_icon_white" />
+        <TextView
+            android:id="@+id/tiletextview"
+            android:layout_width="94dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/alarm_edit_tile"
+            android:textColor="@color/white_textcolor"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/addimagview"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_alignBottom="@+id/tiletextview"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="21dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/confirm_icon" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.android.deskclock.alarms.MyTimePicker
+            android:id="@+id/timerpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+    <include
+        layout="@layout/alarm_edit_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/alarm_clock_vertical_margin" />
+
+</LinearLayout>

@@ -59,6 +59,7 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
         daysOfWeek = (TextView) itemView.findViewById(R.id.days_of_week);
         upcomingInstanceLabel = (TextView) itemView.findViewById(R.id.upcoming_instance_label);
         hairLine = itemView.findViewById(R.id.hairline);
+        final Context context = itemView.getContext();
 
         // Expand handler
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +87,7 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
         clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getItemHolder().getAlarmTimeClickHandler().onClockClicked(getItemHolder().item);
+                getItemHolder().getAlarmTimeClickHandler().onClockClicked(context,getItemHolder().item);
                 Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
                 getItemHolder().expand();
             }

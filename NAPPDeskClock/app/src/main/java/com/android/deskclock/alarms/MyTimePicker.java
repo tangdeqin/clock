@@ -5,11 +5,9 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import com.android.deskclock.R;
-import com.android.deskclock.alarms.VerticalTextPicker;
 import com.android.deskclock.alarms.VerticalTextPicker.OnChangedListener;
 
 public class MyTimePicker extends FrameLayout {

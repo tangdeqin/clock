@@ -115,7 +115,7 @@
     <dimen name="hairline_side_padding">6dp</dimen>
 
     <!-- The minimum height/width of any touch target -->
-    <dimen name="touch_target_min_size">48dp</dimen>
+    <dimen name="touch_target_min_size">68dp</dimen>
 
     <!-- Dimens for drawable padding on Alarms tab -->
     <dimen name="alarm_horizontal_padding">16dp</dimen>

@@ -25,5 +25,5 @@
         android:startColor="#4D000000"
         android:endColor="@android:color/transparent"
         android:type="linear" />
-    <size android:height="8dp" />
+    <size android:height="0dp" />
 </shape>

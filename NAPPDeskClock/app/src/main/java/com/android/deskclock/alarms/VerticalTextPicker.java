@@ -79,7 +79,7 @@ public class VerticalTextPicker extends View {
 
     private int SCROLL_DISTANCE;
 
-    private Drawable mBackgroundFocused;
+    //private Drawable mBackgroundFocused;
 
     private TextPaint mTextPaintLight;
 
@@ -147,8 +147,8 @@ public class VerticalTextPicker extends View {
         mContext = context;
 
         // add by hafieng.tang start
-        mBackgroundFocused = mContext.getResources().getDrawable(R.drawable.countdown_setting);
-        setBackgroundDrawable(mBackgroundFocused);
+     /*   mBackgroundFocused = mContext.getResources().getDrawable(R.drawable.countdown_setting);
+        setBackgroundDrawable(mBackgroundFocused);*/
         initPaint();
         convertValue();
         initData();
@@ -433,30 +433,30 @@ public class VerticalTextPicker extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int height = 0;
         switch (heightMode) {
-            case MeasureSpec.UNSPECIFIED:
+/*            case MeasureSpec.UNSPECIFIED:
                 height = mBackgroundFocused.getIntrinsicHeight();
-                break;
+                break;*/
             case MeasureSpec.EXACTLY:
                 height = heightsize;
                 break;
-            case MeasureSpec.AT_MOST:
+/*            case MeasureSpec.AT_MOST:
                 height = Math.min(mBackgroundFocused.getIntrinsicHeight(), heightsize);
-                break;
+                break;*/
         }
         int width = 0;
         switch (widthMode) {
-            case MeasureSpec.UNSPECIFIED:
+       /*     case MeasureSpec.UNSPECIFIED:
                // Log.d("MeasureSpec.UNSPECIFIED", getClass());
                 width = mBackgroundFocused.getIntrinsicWidth();
-                break;
+                break;*/
             case MeasureSpec.EXACTLY:
                // Log.d("MeasureSpec.EXACTLY", getClass());
                 width = widthsize;
                 break;
-            case MeasureSpec.AT_MOST:
+         /*   case MeasureSpec.AT_MOST:
                // Log.d("MeasureSpec.AT_MOST", getClass());
                 width = Math.min(mBackgroundFocused.getIntrinsicWidth(), widthsize);
-                break;
+                break;*/
         }
 
        // Log.d("with->" + width, getClass());

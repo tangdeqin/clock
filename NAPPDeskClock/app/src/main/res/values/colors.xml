@@ -31,10 +31,15 @@
     <color name="hairline">#28FFFFFF</color>
 
     <color name="clock_gray">#B3FFFFFF</color>
-
-    <color name="default_background">#FF292C45</color>
-
+    
     <!-- shadowColor for widget text -->
     <color name="widget_shadow_color">#67000000</color>
     <color name="timer_shadow_color">#e0000000</color>
+
+    <!--color for alarm-->
+    <color name="default_background">#FF292C45</color>
+    <color name="white_textcolor">#FFFFFFFF</color>
+    <color name="white_labelbg">#FFFFFFFF</color>
+    <color name="white_labeltitle">#DE000000</color>
+    <color name="white_labeltext">#FF268BE1</color>
 </resources>

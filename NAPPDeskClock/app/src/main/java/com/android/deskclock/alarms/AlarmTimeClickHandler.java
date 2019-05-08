@@ -42,9 +42,7 @@ import java.util.Calendar;
 public final class AlarmTimeClickHandler {
 
     private static final LogUtils.Logger LOGGER = new LogUtils.Logger("AlarmTimeClickHandler");
-
     private static final String KEY_PREVIOUS_DAY_MAP = "previousDayMap";
-
     private final Fragment mFragment;
     private final Context mContext;
     private final AlarmUpdateHandler mAlarmUpdateHandler;
@@ -155,10 +153,11 @@ public final class AlarmTimeClickHandler {
         LOGGER.d("Deleting alarm.");
     }
 
-    public void onClockClicked(Alarm alarm) {
+    public void onClockClicked(Context context, Alarm alarm) {
         mSelectedAlarm = alarm;
         Events.sendAlarmEvent(R.string.action_set_time, R.string.label_deskclock);
-        TimePickerDialogFragment.show(mFragment, alarm.hour, alarm.minutes);
+        final Intent intent = TimePickerActivity.createTimePickActivityIntent(context,alarm);
+        context.startActivity(intent);
     }
 
     public void dismissAlarmInstance(AlarmInstance alarmInstance) {

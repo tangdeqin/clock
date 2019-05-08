@@ -38,7 +38,7 @@ import android.widget.TextView;
 import com.android.deskclock.alarms.AlarmTimeClickHandler;
 import com.android.deskclock.alarms.AlarmUpdateHandler;
 import com.android.deskclock.alarms.ScrollHandler;
-import com.android.deskclock.alarms.TimePickerDialogFragment;
+import com.android.deskclock.alarms.TimePickerActivity;
 import com.android.deskclock.alarms.dataadapter.AlarmItemHolder;
 import com.android.deskclock.alarms.dataadapter.CollapsedAlarmViewHolder;
 import com.android.deskclock.alarms.dataadapter.ExpandedAlarmViewHolder;
@@ -59,8 +59,7 @@ import static com.android.deskclock.uidata.UiDataModel.Tab.ALARMS;
  */
 public final class AlarmClockFragment extends DeskClockFragment implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        ScrollHandler,
-        TimePickerDialogFragment.OnTimeSetListener {
+        ScrollHandler{
 
     // This extra is used when receiving an intent to create an alarm, but no alarm details
     // have been passed in, so the alarm page should start the process of creating a new alarm.
@@ -89,7 +88,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private ItemAdapter<AlarmItemHolder> mItemAdapter;
     private AlarmUpdateHandler mAlarmUpdateHandler;
     private EmptyViewController mEmptyViewController;
-    private AlarmTimeClickHandler mAlarmTimeClickHandler;
+    private static AlarmTimeClickHandler mAlarmTimeClickHandler;
     private LinearLayoutManager mLayoutManager;
 
     /**
@@ -184,10 +183,6 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     @Override
     public void onStart() {
         super.onStart();
-
-        if (!isTabSelected()) {
-            TimePickerDialogFragment.removeTimeEditDialog(getFragmentManager());
-        }
     }
 
     @Override
@@ -404,11 +399,12 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private void startCreatingAlarm() {
         // Clear the currently selected alarm.
         mAlarmTimeClickHandler.setSelectedAlarm(null);
-        TimePickerDialogFragment.show(this);
+        Intent intent = new Intent(getActivity(),TimePickerActivity.class);
+        startActivity(intent);
     }
 
-    @Override
-    public void onTimeSet(TimePickerDialogFragment fragment, int hourOfDay, int minute) {
+
+    public static void onTimeSet(int hourOfDay, int minute) {
         mAlarmTimeClickHandler.onTimeSet(hourOfDay, minute);
     }
 
