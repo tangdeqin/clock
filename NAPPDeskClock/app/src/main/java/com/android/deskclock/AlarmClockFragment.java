@@ -404,8 +404,11 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     }
 
 
-    public static void onTimeSet(int hourOfDay, int minute) {
-        mAlarmTimeClickHandler.onTimeSet(hourOfDay, minute);
+    public static void onTimeSet(Alarm alarm) {
+        if (alarm!=null){
+            mAlarmTimeClickHandler.onTimeSet(alarm);
+        }
+
     }
 
     public void removeItem(AlarmItemHolder itemHolder) {

@@ -132,6 +132,8 @@
         <item name="android:numbersSelectorColor">?attr/colorAccent</item>
         <item name="android:numbersTextColor">?android:attr/textColorPrimary</item>
     </style>
-
+    <declare-styleable name="pickerlable">
+        <attr name="lable" format="string" />
+    </declare-styleable>
 
 </resources>

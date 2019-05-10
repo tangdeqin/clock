@@ -32,6 +32,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -209,7 +210,11 @@ public class LabelDialogFragment extends DialogFragment implements View.OnClickL
         }
 
         if (mAlarm != null) {
-            ((AlarmLabelDialogHandler) getActivity()).onDialogLabelSet(mAlarm, label, mTag);
+            if(getActivity().getClass().getName().equals("com.android.deskclock.DeskClock")){
+                ((AlarmLabelDialogHandler) getActivity()).onDialogLabelSet(mAlarm, label, mTag);
+            }else {
+                ((AlarmLabelDialogHandlerT)getActivity()).onDialogLabelSet(mAlarm,label);
+            }
         } else if (mTimerId >= 0) {
             final Timer timer = DataModel.getDataModel().getTimer(mTimerId);
             if (timer != null) {
@@ -221,6 +226,10 @@ public class LabelDialogFragment extends DialogFragment implements View.OnClickL
 
     public interface AlarmLabelDialogHandler {
         void onDialogLabelSet(Alarm alarm, String label, String tag);
+    }
+
+    public interface AlarmLabelDialogHandlerT {
+        void onDialogLabelSet(Alarm alarm, String label);
     }
 
     /**

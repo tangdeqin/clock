@@ -184,18 +184,24 @@ public final class AlarmTimeClickHandler {
         LabelDialogFragment.show(mFragment.getFragmentManager(), fragment);
     }
 
-    public void onTimeSet(int hourOfDay, int minute) {
+    public void onTimeSet(Alarm alarm) {
         if (mSelectedAlarm == null) {
             // If mSelectedAlarm is null then we're creating a new alarm.
             final Alarm a = new Alarm();
-            a.hour = hourOfDay;
-            a.minutes = minute;
+            a.hour = alarm.hour;
+            a.minutes = alarm.minutes;
             a.enabled = true;
+            a.alert = alarm.alert;
+            a.vibrate = alarm.vibrate;
+            a.label = alarm.label;
             mAlarmUpdateHandler.asyncAddAlarm(a);
         } else {
-            mSelectedAlarm.hour = hourOfDay;
-            mSelectedAlarm.minutes = minute;
+            mSelectedAlarm.hour = alarm.hour;
+            mSelectedAlarm.minutes = alarm.minutes;
             mSelectedAlarm.enabled = true;
+            mSelectedAlarm.alert = alarm.alert;
+            mSelectedAlarm.vibrate = alarm.vibrate;
+            mSelectedAlarm.label = alarm.label;
             mScrollHandler.setSmoothScrollStableId(mSelectedAlarm.id);
             mAlarmUpdateHandler.asyncUpdateAlarm(mSelectedAlarm, true, false);
             mSelectedAlarm = null;

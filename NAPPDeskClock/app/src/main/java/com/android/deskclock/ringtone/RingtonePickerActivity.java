@@ -408,7 +408,9 @@ public class RingtonePickerActivity extends BaseActivity
             mSelectedRingtoneUri = ringtone.getUri();
         }
         ringtone.notifyItemChanged();
+
     }
+
 
     /**
      * @param ringtone the ringtone to stop playing

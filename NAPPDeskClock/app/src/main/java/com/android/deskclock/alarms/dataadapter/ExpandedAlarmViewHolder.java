@@ -29,6 +29,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,6 +205,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
 
     private void bindRingtone(Context context, Alarm alarm) {
         final String title = DataModel.getDataModel().getRingtoneTitle(alarm.alert);
+        Log.d("deqin",alarm.alert.toString());
         ringtone.setText(title);
 
         final String description = context.getString(R.string.ringtone_description);

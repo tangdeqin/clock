@@ -2,18 +2,14 @@
 package com.android.deskclock.alarms;
 
 import java.util.Date;
-import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.FontMetrics;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-//import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -26,15 +22,12 @@ public class VerticalTextPicker extends View {
     private static final int TEXT_HORIZONTAL_MARGIN = 10;
 
     private float itemHeight;
-
     private float text_margin = 5;
-
     private float center_x = -1;
     private float center_y = -1;
     private float text_height;
     private float text_width;
     private float picker_text_canvas_height;
-
     private int TEXT_SIZE;
 
     private float VERTICAL_BACKGROUND_MARGIN = 5;
@@ -414,10 +407,6 @@ public class VerticalTextPicker extends View {
         return true;
     }
 
-    protected int getMeasuredHeight_tcl() {
-        return getMeasuredHeight();
-
-    }
 
     /**
      * add by haifeng.tang 2014.8.20
@@ -467,9 +456,6 @@ public class VerticalTextPicker extends View {
         calculateItem();
     }
 
-    /**
-     * add by haifeng.tang for adjust screen
-     */
     private void calculateTextSize() {
         picker_text_canvas_height = getMeasuredHeight() - VERTICAL_BACKGROUND_MARGIN * 2;
         itemHeight = picker_text_canvas_height / 3;
@@ -481,11 +467,8 @@ public class VerticalTextPicker extends View {
         SCROLL_DISTANCE = (int) itemHeight;
     }
 
-    /* PR 564397- Neo Skunkworks - Paul Xu added - 001 End */
-
     @Override
     protected void onDraw(Canvas canvas) {
-
         if (mTextList == null || mTextList.length == 0) {
             return;
         }
@@ -541,11 +524,7 @@ public class VerticalTextPicker extends View {
         canvas.clipRect(0, VERTICAL_BACKGROUND_MARGIN, getMeasuredWidth(), getMeasuredHeight()
                 - VERTICAL_BACKGROUND_MARGIN);
 
-        // modified haifeng.tang 2014.8.22 start
-
         float center_baseline = center_y + text_height / 2;
-
-        int centerItemIndex = mAmountOfItems / 2;
 
         if (mWrapAround) {
             for (int i = 1; i <= mAmountOfItems / 2; i++) {
@@ -614,6 +593,7 @@ public class VerticalTextPicker extends View {
             mText[4] = getTextToDraw(1);
             mText[5] = getTextToDraw(2);
             mText[6] = getTextToDraw(3);
+
         } else {
             mText[0] = getTextToDraw(-1);
             mText[1] = getTextToDraw(0);
@@ -676,10 +656,6 @@ public class VerticalTextPicker extends View {
         }
 
         invalidate();
-    }
-
-    public int getCurrentSelectedPos() {
-        return mCurrentSelectedPos;
     }
 
     public String getCurrent() {

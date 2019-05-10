@@ -16,8 +16,6 @@ public class MyTimePicker extends FrameLayout {
 
 	private int mCurrentMinute = 0;
 
-	private String mCurrentAmOrPm;
-
 	private final VerticalTextPicker mHourPicker;
 
 	private final VerticalTextPicker mMinutePicker;
@@ -27,7 +25,7 @@ public class MyTimePicker extends FrameLayout {
 	private OnTimeChangedListener mOnTimeChangedListener;
 
 	private boolean mIs24HourView;
-	
+
 	private String str[];
 
 	public interface OnTimeChangedListener {
@@ -70,20 +68,10 @@ public class MyTimePicker extends FrameLayout {
 			mMinutePicker.setRange(0, 59);
 			mMinutePicker.setOnChangeListener(mChangedListener);
 			mAmPmPicker = (VerticalTextPicker) findViewById(R.id.amPmpicker_timer);
-			// PR 624010 - Neo Skunkworks - Soar Gao - 002 begin
-			//AM PM translate when the language is yuenan(vi)
-			/*
-			String amStr ="";
-			String pmStr ="";
-			if(isViLanguage(context)){
-				 amStr =context.getResources().getString(R.string.time_am);	
-				 pmStr =context.getResources().getString(R.string.time_pm);
-			}else{*/
-			//Unified display an AM/PM
-			 String amStr = "AM";//context.getResources().getString(R.string.time_am);	
-			 String pmStr = "PM";//context.getResources().getString(R.string.time_pm);
-//			}
-			// PR 624010 - Neo Skunkworks - Soar Gao - 002 end
+
+			String amStr = "AM";//context.getResources().getString(R.string.time_am);
+			String pmStr = "PM";//context.getResources().getString(R.string.time_pm);
+
 			str = new String[]{amStr,pmStr};
 			mAmPmPicker.setWrapAround(false);
 			mAmPmPicker.setItems(str);
@@ -137,7 +125,7 @@ public class MyTimePicker extends FrameLayout {
 		}
 	};
 
-	
+
 	public Integer getCurrentHour() {
 		return mCurrentHour;
 	}
@@ -146,21 +134,15 @@ public class MyTimePicker extends FrameLayout {
 		return mCurrentMinute;
 	}
 
-	public String getCurrentAmOrPmStr() {
-		return mCurrentAmOrPm;
-	}
-
 	public void setCurrentHour(Integer currentHour) {
 		mCurrentHour = currentHour;
-	
+
         if (!is24HourView()) {
-            if (currentHour == 24 || currentHour == 0) {///modify by Yanjingming-001 for pr445587
+            if (currentHour == 24 || currentHour == 0) {
                 currentHour = 12;
                 mAmPmPicker.setCurrent(str[0]);
-            /// add by Yanjingming for pr451128 begin
             } else if (currentHour == 12){
                 mAmPmPicker.setCurrent(str[1]);
-            /// add by Yanjingming for pr451128 end
             } else if (currentHour > 12) {
                 currentHour = currentHour - 12;
                 mAmPmPicker.setCurrent(str[1]);
@@ -176,10 +158,7 @@ public class MyTimePicker extends FrameLayout {
 		mMinutePicker.setCurrent(pad(currentMinute));
 	}
 
-	public void setOnTimeChangedListener(
-			OnTimeChangedListener onTimeChangedListener) {
-		mOnTimeChangedListener = onTimeChangedListener;
-	}
+
 
 	private void onTimeChanged() {
 		if (mOnTimeChangedListener != null) {
@@ -199,14 +178,5 @@ public class MyTimePicker extends FrameLayout {
 	private String pad(int i) {
 		return i < 10 ? "0" + i : String.valueOf(i);
 	}
-	// PR 604170 - Neo Skunkworks - Soar Gao - 001 begin
-	//judge language
-	private boolean isViLanguage(Context context) {
-		String language = context.getResources().getConfiguration().locale.getLanguage();
-		if ("vi".equals(language)) {
-			return true;
-		}
-		return false;
-	}
-	// PR 604170 - Neo Skunkworks - Soar Gao - 001 end
+
 }
