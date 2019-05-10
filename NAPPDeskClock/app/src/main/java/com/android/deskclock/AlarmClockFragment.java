@@ -85,8 +85,8 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private long mCurrentUpdateToken;
 
     // Controllers
-    private ItemAdapter<AlarmItemHolder> mItemAdapter;
-    private AlarmUpdateHandler mAlarmUpdateHandler;
+    private static ItemAdapter<AlarmItemHolder> mItemAdapter;
+    private  static AlarmUpdateHandler mAlarmUpdateHandler;
     private EmptyViewController mEmptyViewController;
     private static AlarmTimeClickHandler mAlarmTimeClickHandler;
     private LinearLayoutManager mLayoutManager;
@@ -409,6 +409,9 @@ public final class AlarmClockFragment extends DeskClockFragment implements
             mAlarmTimeClickHandler.onTimeSet(alarm);
         }
 
+    }
+    public static void deleteItem(Alarm alarm) {
+        mAlarmUpdateHandler.asyncDeleteAlarm(alarm);
     }
 
     public void removeItem(AlarmItemHolder itemHolder) {

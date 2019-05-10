@@ -184,7 +184,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmNotifications.registerNextAlarmWithAlarmManager(context, nextAlarm);
 
         /// M: [ALPS03269543] [Power off Alarm] Set for power off alarm if needed
-        setPoweroffAlarm(context, nextAlarm);
+       /* setPoweroffAlarm(context, nextAlarm);*/
 
     }
 
@@ -1126,7 +1126,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
     /** @} */
 
     /// M: [ALPS03269543] [Power off Alarm] @ setPoweroffAlarm if needed {
-    public static void setPoweroffAlarm(Context context, AlarmInstance nextAlarm) {
+/*    public static void setPoweroffAlarm(Context context, AlarmInstance nextAlarm) {
         if (nextAlarm != null && PowerOffAlarm.canEnablePowerOffAlarm()) {
             long timeInMillis = nextAlarm.getAlarmTime().getTimeInMillis();
             Intent stateChangeIntent = createStateChangeIntent(context, ALARM_MANAGER_TAG,
@@ -1141,7 +1141,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
 
             // Add for power_off_alarm to backup the external ringtone
         }
-    }
+    }*/
     /** @} */
 
     /**

@@ -87,7 +87,7 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
         clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getItemHolder().getAlarmTimeClickHandler().onClockClicked(context,getItemHolder().item);
+                getItemHolder().getAlarmTimeClickHandler().onClockClicked(context, getItemHolder().item);
                 Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
                 getItemHolder().expand();
             }

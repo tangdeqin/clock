@@ -99,7 +99,7 @@ public final class AlarmUpdateHandler {
      * @param popToast    whether or not a toast should be displayed when done.
      * @param minorUpdate if true, don't affect any currently snoozed instances.
      */
-    public void asyncUpdateAlarm(final Alarm alarm, final boolean popToast,
+    public  void asyncUpdateAlarm(final Alarm alarm, final boolean popToast,
             final boolean minorUpdate) {
         final AsyncTask<Void, Void, AlarmInstance> updateTask =
                 new AsyncTask<Void, Void, AlarmInstance>() {

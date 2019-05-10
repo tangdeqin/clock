@@ -52,6 +52,7 @@ import com.android.deskclock.actionbarmenu.MenuItemControllerFactory;
 import com.android.deskclock.actionbarmenu.NavUpMenuItemController;
 import com.android.deskclock.actionbarmenu.OptionsMenuManager;
 import com.android.deskclock.alarms.AlarmUpdateHandler;
+import com.android.deskclock.alarms.TimePickerActivity;
 import com.android.deskclock.data.DataModel;
 import com.android.deskclock.provider.Alarm;
 
@@ -408,9 +409,8 @@ public class RingtonePickerActivity extends BaseActivity
             mSelectedRingtoneUri = ringtone.getUri();
         }
         ringtone.notifyItemChanged();
-
+        TimePickerActivity.setRingtonelUri(mSelectedRingtoneUri);
     }
-
 
     /**
      * @param ringtone the ringtone to stop playing

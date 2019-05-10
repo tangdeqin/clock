@@ -191,6 +191,7 @@ public final class AlarmTimeClickHandler {
             a.hour = alarm.hour;
             a.minutes = alarm.minutes;
             a.enabled = true;
+            a.deleteAfterUse = alarm.deleteAfterUse;
             a.alert = alarm.alert;
             a.vibrate = alarm.vibrate;
             a.label = alarm.label;
@@ -199,6 +200,7 @@ public final class AlarmTimeClickHandler {
             mSelectedAlarm.hour = alarm.hour;
             mSelectedAlarm.minutes = alarm.minutes;
             mSelectedAlarm.enabled = true;
+            mSelectedAlarm.deleteAfterUse = alarm.deleteAfterUse;
             mSelectedAlarm.alert = alarm.alert;
             mSelectedAlarm.vibrate = alarm.vibrate;
             mSelectedAlarm.label = alarm.label;

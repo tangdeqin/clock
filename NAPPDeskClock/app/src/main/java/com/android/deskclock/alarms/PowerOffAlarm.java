@@ -29,15 +29,9 @@
  * MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
  */
 
+/*
 package com.android.deskclock.alarms;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -45,13 +39,8 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.storage.IStorageManager;
 import android.os.storage.StorageManager;
-import android.text.TextUtils;
 
 import com.android.deskclock.LogUtils;
-import com.android.deskclock.provider.AlarmInstance;
-
-import java.io.File;
-import java.io.IOException;
 
 @SuppressWarnings("PMD")
 public class PowerOffAlarm {
@@ -93,13 +82,15 @@ public class PowerOffAlarm {
         /// @}
     }
 
-    /**
+    */
+/**
      * Only the following two conditions should enable power off alarm:
      * 1.If the device is tablet and the user is tablet owner, enable power off alarm.
      * 2.If property ro.crypto.state is unencrypted or getPasswordType() == CRYPT_TYPE_DEFAULT.
      *
      * Other conditions should disable power off alarm.
-     */
+     *//*
+
     public static boolean canEnablePowerOffAlarm() {
         boolean enabled = (UserHandle.myUserId() == UserHandle.USER_OWNER)
                 && (deviceUnencrypted() || StorageManager.CRYPT_TYPE_DEFAULT == getPasswordType());
@@ -108,3 +99,4 @@ public class PowerOffAlarm {
 
     }
 }
+*/
