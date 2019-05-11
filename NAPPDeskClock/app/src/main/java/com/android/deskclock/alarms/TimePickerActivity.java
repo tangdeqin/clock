@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import com.android.deskclock.AlarmClockFragment;
 import com.android.deskclock.BaseActivity;
 import com.android.deskclock.LabelDialogFragment;
 import com.android.deskclock.R;
+import com.android.deskclock.ThemeUtils;
 import com.android.deskclock.Utils;
 import com.android.deskclock.data.DataModel;
 import com.android.deskclock.data.Weekdays;
@@ -40,8 +42,7 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
     private static final String ARG_MINUTE = TAG + "_minute";
 
     private static Alarm alarm;
-    private int hour;
-    private int minute;
+    private AlarmStateOfStart mAlarmStateOfStart = new AlarmStateOfStart();
     private boolean mVibrateState;
     private String mLabelText;
     private static Uri mRingtoneUri;
@@ -80,40 +81,54 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         Intent intent = getIntent();
         alarm = intent.getParcelableExtra(TAG);
         if(alarm!=null){
-            hour = alarm.hour;
-            minute = alarm.minutes;
-            mRepeatOnOff.setChecked(alarm.deleteAfterUse?false:true);
+            mAlarmStateOfStart.hour = alarm.hour;
+            mAlarmStateOfStart.minute = alarm.minutes;
+            mAlarmStateOfStart.daysofweek = alarm.daysOfWeek;
+            mAlarmStateOfStart.RingtoneUri = alarm.alert;
+            mAlarmStateOfStart.VibrateState = alarm.vibrate;
+            mAlarmStateOfStart.label = alarm.label;
+            mRingtoneUri = alarm.alert;
+            mVibrateState = alarm.vibrate;
+            mLabelText = alarm.label;
+            if (mAlarmStateOfStart.daysofweek.toString().trim().length()==2){
+               mRepeatOnOff.setChecked(false);
+            }else {
+                mRepeatOnOff.setChecked(true);
+            }
+            setDayButtonsBackground();
             mRepeatDays.setVisibility(mRepeatOnOff.isChecked()?View.VISIBLE:View.GONE);
-            mRingtoneTv.setText(DataModel.getDataModel().getRingtoneTitle(alarm.alert));
-            final boolean silent = Utils.RINGTONE_SILENT.equals(alarm.alert);
+            mRingtoneTv.setText(DataModel.getDataModel().getRingtoneTitle(mAlarmStateOfStart.RingtoneUri));
+            final boolean silent = Utils.RINGTONE_SILENT.equals(mAlarmStateOfStart.RingtoneUri);
             final Drawable icon = Utils.getVectorDrawable(this,
                     silent ? R.drawable.ic_ringtone_silent : R.drawable.ic_ringtone);
             mRingtoneTv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
             final Drawable deleteIcon = Utils.getVectorDrawable(this, R.drawable.ic_delete_small);
-            mVibtareSc.setChecked(alarm.vibrate);
-            mLabelTv.setText(alarm.label);
+            mVibtareSc.setChecked(mAlarmStateOfStart.VibrateState);
+            mLabelTv.setText(mAlarmStateOfStart.label);
             mDeteleTv.setCompoundDrawablesRelativeWithIntrinsicBounds(deleteIcon, null, null, null);
 
         }
         else{
             alarm = new Alarm();
-            hour = savedInstanceState!=null?savedInstanceState.getInt(ARG_HOUR, now.get(Calendar.HOUR_OF_DAY))
+            mAlarmStateOfStart.hour = savedInstanceState!=null?savedInstanceState.getInt(ARG_HOUR, now.get(Calendar.HOUR_OF_DAY))
                     :now.get(Calendar.HOUR_OF_DAY);
-            minute = savedInstanceState!=null?savedInstanceState.getInt(ARG_MINUTE, now.get(Calendar.MINUTE))
+            mAlarmStateOfStart.minute = savedInstanceState!=null?savedInstanceState.getInt(ARG_MINUTE, now.get(Calendar.MINUTE))
                     :now.get(Calendar.MINUTE);
             mRepeatOnOff.setChecked(false);
             mRepeatDays.setVisibility(View.GONE);
-            Uri urlSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            mRingtoneTv.setText(DataModel.getDataModel().getRingtoneTitle(urlSound));
+            mRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            mRingtoneTv.setText(DataModel.getDataModel().getRingtoneTitle(mRingtoneUri));
             Drawable icon = Utils.getVectorDrawable(this, R.drawable.ic_ringtone);
             mRingtoneTv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
-            alarm.alert = urlSound;
-            mVibtareSc.setChecked(false);
-            mLabelTv.setText("");
+            alarm.alert = mRingtoneUri;
+            mVibrateState = false;
+            mVibtareSc.setChecked(mVibrateState);
+            mLabelText = "";
+            mLabelTv.setText(mLabelText.trim());
             mDeteleTv.setVisibility(View.INVISIBLE);
         }
-        timePicker.setCurrentHour(hour);
-        timePicker.setCurrentMinute(minute);
+        timePicker.setCurrentHour(mAlarmStateOfStart.hour);
+        timePicker.setCurrentMinute(mAlarmStateOfStart.minute);
         timePicker.setIs24HourView(DateFormat.is24HourFormat(this));
 
         mAddAlarmIv.setOnClickListener(this);
@@ -124,6 +139,7 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         mVibtareSc.setOnClickListener(this);
         mLabelTv.setOnClickListener(this);
         mDeteleTv.setOnClickListener(this);
+        setDaysOfWeek();
     }
 
     @Override
@@ -135,14 +151,13 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.backimagview:
-                finish();
+                pressBackButton();
                 break;
             case R.id.repeat_onoff:
                 setRepeatOrNot();
-                setRepeatDaysVisble();
                 break;
             case R.id.repeat_days:
-                setRepeatDaysVisble();
+
                 break;
             case R.id.ringtone_choose:
                 setRingtone();
@@ -188,7 +203,7 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
             }
     }
    public void setAlarm(){
-       alarm.hour=timePicker.getCurrentHour();
+       alarm.hour = timePicker.getCurrentHour();
        alarm.minutes = timePicker.getCurrentMinute();
        alarm.vibrate = mVibrateState;
        if (mLabelText!=null && mLabelText.trim().length()!=0){
@@ -200,6 +215,36 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
    }
    public void setRepeatOrNot(){
        mRepeatOrNot = mRepeatOnOff.isChecked();
+       AlarmClockFragment.setAlarmRepeatEnable(alarm,mRepeatOrNot);
+       setDayButtonsBackground();
+       setRepeatDaysVisble();
+   }
+
+   public void setDayButtonsBackground(){
+       final List<Integer> weekdays = DataModel.getDataModel().getWeekdayOrder().getCalendarDays();
+       for (int i = 0; i < weekdays.size(); i++) {
+           if (alarm.daysOfWeek.isBitOn(weekdays.get(i))) {
+               dayButtons[i].setChecked(true);
+               dayButtons[i].setTextColor(ThemeUtils.resolveColor(this,
+                       android.R.attr.windowBackground));
+           } else {
+               dayButtons[i].setChecked(false);
+               dayButtons[i].setTextColor(Color.WHITE);
+           }
+       }
+   }
+   public void setDaysOfWeek(){
+       for (int i = 0; i < dayButtons.length; i++) {
+           final int buttonIndex = i;
+           dayButtons[i].setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   final boolean isChecked = ((CompoundButton) view).isChecked();
+                   AlarmClockFragment.setAlarmDayOfWeekEnabled(alarm,isChecked,buttonIndex);
+                   setDayButtonsBackground();
+               }
+           });
+       }
    }
    public void setLabel(Alarm alarm,String label){
        alarm.label = label;
@@ -241,7 +286,6 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
                     }
                 }).setNegativeButton("放弃", null)
                 .create().show();
-
     }
 
     public void setRepeatDaysVisble(){
@@ -266,5 +310,58 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
             mRepeatDays.addView(dayButtonFrame);
             dayButtons[i] = dayButton;
         }
+    }
+
+    public void pressBackButton(){
+        if(isChangedOfSetting()==false){
+            finish();
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("保存更改？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            setAlarm();
+                            AlarmClockFragment.onTimeSet(alarm);
+                            finish();
+                        }
+                    }).setNegativeButton("放弃", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            }).create().show();
+        }
+    }
+    public Boolean isChangedOfSetting(){
+        Boolean isChanged = false;
+        if(mAlarmStateOfStart.hour != timePicker.getCurrentHour()){
+            isChanged = true;
+        }
+        if(mAlarmStateOfStart.minute != timePicker.getCurrentMinute()){
+            isChanged = true;
+        }
+        if (mAlarmStateOfStart.daysofweek != alarm.daysOfWeek){
+            isChanged = true;
+        }
+        if(mAlarmStateOfStart.RingtoneUri != mRingtoneUri){
+            isChanged = true;
+        }
+        if(mAlarmStateOfStart.VibrateState != mVibrateState){
+            isChanged = true;
+        }
+        if (mAlarmStateOfStart.label != mLabelText.trim()){
+            isChanged = true;
+        }
+        return isChanged;
+    }
+
+    public class AlarmStateOfStart{
+        int hour = 0;
+        int minute = 0 ;
+        Weekdays daysofweek = Weekdays.NONE;
+        Uri RingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        Boolean VibrateState = false;
+        String label = "";
     }
 }

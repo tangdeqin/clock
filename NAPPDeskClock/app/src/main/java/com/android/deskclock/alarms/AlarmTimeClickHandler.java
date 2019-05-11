@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 
 import com.android.deskclock.AlarmClockFragment;
 import com.android.deskclock.LabelDialogFragment;
@@ -191,7 +192,7 @@ public final class AlarmTimeClickHandler {
             a.hour = alarm.hour;
             a.minutes = alarm.minutes;
             a.enabled = true;
-            a.deleteAfterUse = alarm.deleteAfterUse;
+            a.daysOfWeek = alarm.daysOfWeek;
             a.alert = alarm.alert;
             a.vibrate = alarm.vibrate;
             a.label = alarm.label;
@@ -200,7 +201,7 @@ public final class AlarmTimeClickHandler {
             mSelectedAlarm.hour = alarm.hour;
             mSelectedAlarm.minutes = alarm.minutes;
             mSelectedAlarm.enabled = true;
-            mSelectedAlarm.deleteAfterUse = alarm.deleteAfterUse;
+            mSelectedAlarm.daysOfWeek = alarm.daysOfWeek;
             mSelectedAlarm.alert = alarm.alert;
             mSelectedAlarm.vibrate = alarm.vibrate;
             mSelectedAlarm.label = alarm.label;

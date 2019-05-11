@@ -410,6 +410,12 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         }
 
     }
+    public static void setAlarmRepeatEnable(Alarm alarm,Boolean checked){
+        mAlarmTimeClickHandler.setAlarmRepeatEnabled(alarm,checked);
+    }
+    public static void setAlarmDayOfWeekEnabled(Alarm alarm, boolean checked, int index){
+        mAlarmTimeClickHandler.setDayOfWeekEnabled(alarm,checked,index);
+    }
     public static void deleteItem(Alarm alarm) {
         mAlarmUpdateHandler.asyncDeleteAlarm(alarm);
     }
