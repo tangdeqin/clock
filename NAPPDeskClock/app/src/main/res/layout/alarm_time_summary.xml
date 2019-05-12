@@ -20,4 +20,5 @@
     style="@style/display_time"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:textSize="@dimen/alarm_timetext_size"
     android:background="?attr/selectableItemBackground"/>
