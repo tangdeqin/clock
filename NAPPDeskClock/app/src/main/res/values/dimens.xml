@@ -19,7 +19,6 @@
      for different hardware and product builds. -->
 <resources>
     <dimen name="label_text_size">14sp</dimen>
-    <dimen name="label_edittext_padding">21dp</dimen>
     <dimen name="time_margin_top">32dip</dimen>
     <dimen name="screensaver_margin">16dip</dimen>
     <dimen name="alarm_label_padding">8dip</dimen>
@@ -136,4 +135,23 @@
     <dimen name="fab_height">96dp</dimen>
     <!-- M: [ALPS03414745]  Adding top padding for Stopwatch laplist to remove overlapping @{ -->
     <dimen name="lap_list_top_padding">42dp</dimen>
+
+    <!--The size for alarm_edit_label.xml -->
+    <dimen name="labeltext_top_padding">20dp</dimen>
+    <dimen name="labeltext_size">20sp</dimen>
+    <dimen name="labeltext_font_size">14sp</dimen>
+    <dimen name="label_edittext_padding">20dp</dimen>
+    <dimen name="label_ok_ko_font_size">20sp</dimen>
+    <dimen name="label_edittext_hight">60dp</dimen>
+    <dimen name="label_ok_ko_hight">50dp</dimen>
+
+    <!--The size for alarm_timepick.xml of Edit alarm -->
+    <dimen name="alarmedit_top_padding">34dp</dimen>
+    <dimen name="alarmedit_title_hight">56dp</dimen>
+    <dimen name="alarmedit_le_ri_padding">20dp</dimen>
+    <dimen name="alarmedit_titlefont_size">20sp</dimen>
+    <dimen name="alarmedit_titleimage_size">21dp</dimen>
+    <dimen name="alarmedit_titletext_width">94dp</dimen>
+    <dimen name="alarmedit_titletext_hight">24dp</dimen>
+
 </resources>

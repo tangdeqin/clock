@@ -7,40 +7,40 @@
     android:orientation="vertical" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="34dp"
+        android:layout_height="@dimen/alarmedit_top_padding"
         android:background="@color/default_background">
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/alarmedit_title_hight"
         android:background="@color/default_background">
         <ImageView
             android:id="@+id/backimagview"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
+            android:layout_width="@dimen/alarmedit_titleimage_size"
+            android:layout_height="@dimen/alarmedit_titleimage_size"
             android:layout_alignBottom="@+id/tiletextview"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="21dp"
+            android:layout_marginStart="@dimen/alarmedit_le_ri_padding"
             android:layout_centerVertical="true"
             android:src="@mipmap/close_icon_white" />
         <TextView
             android:id="@+id/tiletextview"
-            android:layout_width="94dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/alarmedit_titletext_width"
+            android:layout_height="@dimen/alarmedit_titletext_hight"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:text="@string/alarm_edit_tile"
             android:textColor="@color/white_textcolor"
-            android:textSize="20sp" />
+            android:textSize="@dimen/alarmedit_titlefont_size" />
 
         <ImageView
             android:id="@+id/addimagview"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
+            android:layout_width="@dimen/alarmedit_titleimage_size"
+            android:layout_height="@dimen/alarmedit_titleimage_size"
             android:layout_alignBottom="@+id/tiletextview"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="21dp"
+            android:layout_marginEnd="@dimen/alarmedit_le_ri_padding"
             android:layout_centerVertical="true"
             android:src="@mipmap/confirm_icon" />
     </RelativeLayout>
@@ -59,8 +59,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
+        android:paddingEnd="@dimen/alarmedit_le_ri_padding"
+        android:paddingStart="@dimen/alarmedit_le_ri_padding"
         app:columnCount="8"
         app:columnOrderPreserved="false"
         app:rowCount="10">
