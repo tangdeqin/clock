@@ -117,6 +117,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
             public void onClick(View v) {
                 Events.sendAlarmEvent(R.string.action_collapse_implied, R.string.label_deskclock);
                 getItemHolder().collapse();
+                getAlarmTimeClickHandler().onClockClicked(context,getItemHolder().item);
             }
         });
         arrow.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +128,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
             }
         });
         // Edit time handler
+        clock.setEnabled(false);
         clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

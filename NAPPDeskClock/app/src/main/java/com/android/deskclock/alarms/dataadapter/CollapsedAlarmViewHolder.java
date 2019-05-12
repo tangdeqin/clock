@@ -66,21 +66,22 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
             @Override
             public void onClick(View v) {
                 Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
-                getItemHolder().expand();
+                //getItemHolder().expand();
+                getItemHolder().getAlarmTimeClickHandler().onClockClicked(context, getItemHolder().item);
             }
         });
         alarmLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
-                getItemHolder().expand();
+                //getItemHolder().expand();
             }
         });
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Events.sendAlarmEvent(R.string.action_expand, R.string.label_deskclock);
-                getItemHolder().expand();
+                //getItemHolder().expand();
             }
         });
         // Edit time handler
@@ -89,7 +90,7 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
             public void onClick(View v) {
                 getItemHolder().getAlarmTimeClickHandler().onClockClicked(context, getItemHolder().item);
                 Events.sendAlarmEvent(R.string.action_expand_implied, R.string.label_deskclock);
-                getItemHolder().expand();
+                //getItemHolder().expand();
             }
         });
 

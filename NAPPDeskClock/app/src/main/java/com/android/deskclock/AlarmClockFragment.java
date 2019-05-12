@@ -358,7 +358,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         }
 
         if (alarmPosition >= 0) {
-            mItemAdapter.findItemById(alarmId).expand();
+            //mItemAdapter.findItemById(alarmId).expand();
             smoothScrollTo(alarmPosition);
         } else {
             // Trying to display a deleted alarm should only happen from a missed notification for

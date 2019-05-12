@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 
 import com.android.deskclock.AlarmClockFragment;
 import com.android.deskclock.LabelDialogFragment;

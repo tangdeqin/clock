@@ -60,6 +60,8 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
         clock = (TextTime) itemView.findViewById(R.id.digital_clock);
         onOff = (CompoundButton) itemView.findViewById(R.id.onoff);
         arrow = (ImageView) itemView.findViewById(R.id.arrow);
+        arrow.setVisibility(View.INVISIBLE);
+        arrow.setEnabled(false);
         preemptiveDismissButton =
                 (TextView) itemView.findViewById(R.id.preemptive_dismiss_button);
         preemptiveDismissButton.setOnClickListener(new View.OnClickListener() {
