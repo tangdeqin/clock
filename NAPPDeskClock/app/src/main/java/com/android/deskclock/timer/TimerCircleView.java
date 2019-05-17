@@ -68,18 +68,21 @@ public final class TimerCircleView extends View {
         final float dotDiameter = resources.getDimension(R.dimen.circletimer_dot_size);
 
         mDotRadius = dotDiameter / 2f;
-        mStrokeSize = resources.getDimension(R.dimen.circletimer_circle_size);
+        mStrokeSize = resources.getDimension(R.dimen.circletimer_circle_size_timer);
         mRadiusOffset = Utils.calculateRadiusOffset(mStrokeSize, dotDiameter, 0);
 
-        mRemainderColor = Color.WHITE;
-        mCompletedColor = ThemeUtils.resolveColor(context, R.attr.colorAccent);
+        //modify yeqing.lv for XR7685084 on 2019-5-8 begin
+        mRemainderColor = Color.TRANSPARENT; // 初始画笔颜色透明;
+        mCompletedColor = Color.GRAY;  //填充的颜色
+        //modify yeqing.lv for XR7685084 on 2019-5-8 end
+
 
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
 
         mFill.setAntiAlias(true);
-        mFill.setColor(mCompletedColor);
-        mFill.setStyle(Paint.Style.FILL);
+        mFill.setColor(getResources().getColor(R.color.stopwatch_dot_color));
+        mFill.setStyle(Paint.Style.FILL);//paint的形状
     }
 
     void update(Timer timer) {
@@ -129,17 +132,18 @@ public final class TimerCircleView extends View {
             redPercent =
                 Math.min(1, (float) mTimer.getElapsedTime() / (float) mTimer.getTotalLength());
             final float whitePercent = 1 - redPercent;
-
+            //modify yeqing.lv for XR7685084 on 2019-5-8 begin
             // Draw a white arc to indicate the amount of timer that remains.
-            canvas.drawArc(mArcRect, 270, whitePercent * 360, false, mPaint);
+            canvas.drawArc(mArcRect, 270, -whitePercent * 360, false, mPaint);
 
             // Draw a red arc to indicate the amount of timer completed.
             mPaint.setColor(mCompletedColor);
-            canvas.drawArc(mArcRect, 270, -redPercent * 360 , false, mPaint);
+            canvas.drawArc(mArcRect, 270, redPercent * 360 , false, mPaint);
         }
 
         // Draw a red dot to indicate current progress through the timer.
-        final float dotAngleDegrees = 270 - redPercent * 360;
+        final float dotAngleDegrees = 270 + redPercent * 360;
+        //modify yeqing.lv for XR7685084 on 2019-5-8 end
         final double dotAngleRadians = Math.toRadians(dotAngleDegrees);
         final float dotX = xCenter + (float) (radius * Math.cos(dotAngleRadians));
         final float dotY = yCenter + (float) (radius * Math.sin(dotAngleRadians));

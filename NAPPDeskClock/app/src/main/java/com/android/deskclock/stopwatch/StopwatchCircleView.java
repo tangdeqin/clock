@@ -31,7 +31,7 @@ import com.android.deskclock.Utils;
 import com.android.deskclock.data.DataModel;
 import com.android.deskclock.data.Lap;
 import com.android.deskclock.data.Stopwatch;
-
+import com.android.deskclock.LogUtils;  // add by tao.luo
 import java.util.List;
 
 /**
@@ -73,22 +73,22 @@ public final class StopwatchCircleView extends View {
         super(context, attrs);
 
         final Resources resources = context.getResources();
-        final float dotDiameter = resources.getDimension(R.dimen.circletimer_dot_size);
+        final float dotDiameter = resources.getDimension(R.dimen.circlestopwatch_dot_size);
 
         mDotRadius = dotDiameter / 2f;
         mScreenDensity = resources.getDisplayMetrics().density;
-        mStrokeSize = resources.getDimension(R.dimen.circletimer_circle_size);
-        mMarkerStrokeSize = resources.getDimension(R.dimen.circletimer_marker_size);
+        mStrokeSize = resources.getDimension(R.dimen.circlestopwatch_circle_size);
+        mMarkerStrokeSize = resources.getDimension(R.dimen.circlestopwatch_marker_size);
         mRadiusOffset = Utils.calculateRadiusOffset(mStrokeSize, dotDiameter, mMarkerStrokeSize);
 
-        mRemainderColor = Color.WHITE;
+        mRemainderColor = Color.GRAY; // modify by tao.luo  Color.WHITE;
         mCompletedColor = ThemeUtils.resolveColor(context, R.attr.colorAccent);
 
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
 
         mFill.setAntiAlias(true);
-        mFill.setColor(mCompletedColor);
+        mFill.setColor(getResources().getColor(R.color.stopwatch_dot_color)/* modify by tao.luo Color.mCompletedColor*/);
         mFill.setStyle(Paint.Style.FILL);
     }
 
@@ -99,6 +99,8 @@ public final class StopwatchCircleView extends View {
         postInvalidateOnAnimation();
     }
 
+    // begin modify by tao.luo
+    /*
     @Override
     public void onDraw(Canvas canvas) {
         // Compute the size and location of the circle to be drawn.
@@ -166,6 +168,66 @@ public final class StopwatchCircleView extends View {
             postInvalidateOnAnimation();
         }
     }
+    */
+    @Override
+    public void onDraw(Canvas canvas) {
+        // Compute the size and location of the circle to be drawn.
+        final int xCenter = getWidth() / 2;
+        final int yCenter = getHeight() / 2;
+        final float radius = Math.min(xCenter, yCenter) - mRadiusOffset;
+
+        // Reset old painting state.
+        mPaint.setColor(mRemainderColor);
+        mPaint.setStrokeWidth(mStrokeSize);
+
+        final List<Lap> laps = getLaps();
+
+        final Stopwatch stopwatch = getStopwatch();
+        final float dotAngleDegrees;
+        final double dotAngleRadians;
+        final float dotX;
+        final float dotY;
+
+        long currentLapTime = 0;
+
+        if (laps.isEmpty() || !DataModel.getDataModel().canAddMoreLaps()) {
+            currentLapTime = stopwatch.getTotalTime();
+        } else {
+            final Lap priorLap = laps.get(0);
+            currentLapTime = stopwatch.getTotalTime() - priorLap.getAccumulatedTime();
+        }
+
+        float redPercent = (float) currentLapTime / (float) (60 * 1000);
+        if(redPercent > 1) {
+            redPercent = (float) (redPercent - (int)redPercent);
+        }
+
+        // Draw a combination of red and white arcs to create a circle.
+        mArcRect.top = yCenter - radius;
+        mArcRect.bottom = yCenter + radius;
+        mArcRect.left =  xCenter - radius;
+        mArcRect.right = xCenter + radius;
+
+        LogUtils.i("thomas:" + "first LAP currentLapTime: " + currentLapTime);
+        LogUtils.i("thomas:" + "redPercent: " + redPercent);
+
+        // Draw a complete white circle; no red arc required.
+        canvas.drawCircle(xCenter, yCenter, radius, mPaint);
+
+        // Draw a red dot to indicate current position relative to reference lap.
+        dotAngleDegrees = 270 + redPercent * 360;
+        dotAngleRadians = Math.toRadians(dotAngleDegrees);
+        dotX = xCenter + (float) (radius * Math.cos(dotAngleRadians));
+        dotY = yCenter + (float) (radius * Math.sin(dotAngleRadians));
+        canvas.drawCircle(dotX, dotY, mDotRadius, mFill);
+
+        // If the stopwatch is not running it does not require continuous updates.
+        if (stopwatch.isRunning()) {
+            postInvalidateOnAnimation();
+        }
+
+    }
+    // end
 
     private Stopwatch getStopwatch() {
         return DataModel.getDataModel().getStopwatch();

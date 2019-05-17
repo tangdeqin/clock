@@ -1,30 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layoutDirection="ltr"
-    android:layout_height="150dp" >
+    android:layout_height="250dp"
+    android:layout_gravity="top|center"
+    android:layout_marginTop="30dp"
+    android:layout_marginLeft="30dp">
 
-    <com.android.deskclock.timer.VerticalTextPicker
+    <com.android.deskclock.VerticalTextPicker
         android:id="@+id/timerpicker_hour"
-        android:layout_width="72dp"
-        android:layout_height="wrap_content"
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true" />
-
-    <com.android.deskclock.timer.VerticalTextPicker
-        android:id="@+id/timerpicker_minute"
-        android:layout_width="72dp"
+    <TextView
+        android:id="@+id/textpicktv1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="40sp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/timerpicker_hour"/>
+
+    <com.android.deskclock.VerticalTextPicker
+        android:id="@+id/timerpicker_minute"
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:focusableInTouchMode="true"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/textpicktv1"/>
 
-  <com.android.deskclock.timer.VerticalTextPicker
-        android:id="@+id/timerpicker_second"
-        android:layout_width="72dp"
+    <TextView
+        android:id="@+id/textpicktv2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:text=":"
+        android:textSize="40sp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/timerpicker_minute"/>
 
-</LinearLayout>
+  <com.android.deskclock.VerticalTextPicker
+        android:id="@+id/timerpicker_second"
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+      android:layout_toRightOf="@id/textpicktv2"/>
+
+</RelativeLayout>

@@ -168,12 +168,14 @@ public class ExpiredTimersActivity extends BaseActivity {
         mExpiredTimersView.addView(timerItem);
 
         // Hide the label hint for expired timers.
-        final TextView labelView = (TextView) timerItem.findViewById(R.id.timer_label);
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 begin
+        /*final TextView labelView = (TextView) timerItem.findViewById(R.id.timer_label);
         labelView.setHint(null);
-        labelView.setVisibility(TextUtils.isEmpty(timer.getLabel()) ? View.GONE : View.VISIBLE);
+        labelView.setVisibility(TextUtils.isEmpty(timer.getLabel()) ? View.GONE : View.VISIBLE);*/
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 end
 
         // Add logic to the "Add 1 Minute" button.
-        final View addMinuteButton = timerItem.findViewById(R.id.reset_add);
+        final View addMinuteButton = timerItem.findViewById(R.id.add_oneMin);
         addMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +183,27 @@ public class ExpiredTimersActivity extends BaseActivity {
                 DataModel.getDataModel().addTimerMinute(timer);
             }
         });
+        //add by yeqing.lv for XR7685084 on 2019-5-8 begin
+        // Add logic to the "Add 5 Minute" button.
+        final View addFiveMinuteButton = timerItem.findViewById(R.id.add_fiveMin);
+        addMinuteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Timer timer = DataModel.getDataModel().getTimer(timerId);
+                DataModel.getDataModel().addTimerMinute(timer);
+            }
+        });
+
+        // Add logic to the "Add 10 Minute" button.
+        final View addTenMinuteButton = timerItem.findViewById(R.id.add_tenMin);
+        addMinuteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Timer timer = DataModel.getDataModel().getTimer(timerId);
+                DataModel.getDataModel().addTimerMinute(timer);
+            }
+        });
+        //add by yeqing.lv for XR7685084 on 2019-5-8 end
 
         // If the first timer was just added, center it.
         final List<Timer> expiredTimers = getExpiredTimers();

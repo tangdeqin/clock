@@ -60,6 +60,13 @@ import static android.view.View.VISIBLE;
 import static com.android.deskclock.uidata.UiDataModel.Tab.CLOCKS;
 import static java.util.Calendar.DAY_OF_WEEK;
 
+//begin zhixiong.liu.hz for task7685084 20190508
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.util.Log;
+import android.widget.FrameLayout;
+import android.text.TextUtils;
+//end zhixiong.liu.hz for task7685084 20190508
 /**
  * Fragment that shows the clock (analog or digital), the next alarm info and the world clock.
  */
@@ -81,7 +88,9 @@ public final class ClockFragment extends DeskClockFragment {
     private RecyclerView mCityList;
     private String mDateFormat;
     private String mDateFormatForAccessibility;
-
+    //begin zhxiong.liu.hz for task7685084 20190508
+    private FrameLayout mWorldview;
+    //end zhxiong.liu.hz for task7685084 20190508
     /**
      * The public no-arg constructor required by all fragments.
      */
@@ -136,10 +145,85 @@ public final class ClockFragment extends DeskClockFragment {
 
         // Schedule a runnable to update the date every quarter hour.
         UiDataModel.getUiDataModel().addQuarterHourCallback(mQuarterHourUpdater, 100);
-
+        
+        //begin zhxiong.liu.hz for task7685084 20190508
+        mWorldview = (FrameLayout) fragmentView.findViewById(R.id.worldmap);
+        if(mWorldview != null){
+            mWorldview.post(new Runnable() {
+                @Override
+                public void run() {
+                     drawHighlightCity(context,mWorldview);
+                }
+            });
+        }
+        //end zhixiong.liu.hz for task7685084 20190508
         return fragmentView;
     }
+    
+    //begin zhixiong.liu.hz for task7685084 20190508
+    private void drawHighlightCity(Context contxt,FrameLayout worldmap){        
+        int viewWidth = worldmap.getWidth();
+        int viewHeight = worldmap.getHeight();
+                
+        if(viewWidth >0 && viewHeight >0){
+            float x =(float)50.0;
+            float y =(float)50.0;
+            City homeCity;
+            List<City> selectCities;
 
+            worldmap.removeAllViews();
+            homeCity = DataModel.getDataModel().getHomeCity();
+            selectCities = DataModel.getDataModel().getSelectedCities();
+            /*if(!TextUtils.isEmpty(homeCity.getId())){
+                int lng = homeCity.getLongitude();
+                int lat = homeCity.getLatitude();
+                x = (float)viewWidth*(lng+180)/360;
+                y = (float)viewHeight*(90-lat)/180;
+                worldmap.addView(new CityView(contxt,x,y));  
+            }*/
+
+            for (City city : selectCities) {
+                if(!TextUtils.isEmpty(city.getId())){
+                    int lng = city.getLongitude();
+                    int lat = city.getLatitude();                    
+                    if(lng > -170){
+                        x = (float)(viewWidth*(lng+170)/360);
+                    }
+                    else{
+                        x = (float)(viewWidth*(430+lng)/360);
+                    }
+                    y = (float)(viewHeight* (90-lat)/180);
+                    worldmap.addView(new CityView(contxt,x,y));
+                }
+            }
+            
+        }
+    }
+    
+    public class CityView extends View {
+        float mx,my;
+        public CityView(Context context,float x, float y) {
+            super(context);
+            mx = x;
+            my = y;
+        }
+        @Override
+        protected void onDraw(Canvas canvas) {
+            //super.onDraw(canvas);
+            //canvas.drawColor(Color.BLACK);
+            Paint paint = new Paint();
+            paint.setColor(0xffffffff);
+            paint.setAntiAlias(true);
+            paint.setStrokeWidth(4);
+            //paint.setStyle(Paint.Style.STROKE);
+            canvas.drawPoint(mx,my,paint);
+        }
+    }
+
+    //end zhixiong.liu.hz for task7685084 20190508
+    
+    
+    
     @Override
     public void onResume() {
         super.onResume();
@@ -175,6 +259,11 @@ public final class ClockFragment extends DeskClockFragment {
             final Uri uri = Settings.System.getUriFor(Settings.System.NEXT_ALARM_FORMATTED);
             activity.getContentResolver().registerContentObserver(uri, false, mAlarmObserver);
         }
+        //begin zhixiong.liu.hz for task7685084 20190508
+        if(mWorldview != null){
+            drawHighlightCity(activity,mWorldview);
+        }
+        //end zhixiong.liu.hz for task7685084 20190508  
     }
 
     @Override
@@ -205,7 +294,7 @@ public final class ClockFragment extends DeskClockFragment {
     @Override
     public void onUpdateFab(@NonNull ImageView fab) {
         fab.setVisibility(VISIBLE);
-        fab.setImageResource(R.drawable.ic_public);
+        fab.setImageResource(R.drawable.ic_clock_add);
         fab.setContentDescription(fab.getResources().getString(R.string.button_cities));
     }
 

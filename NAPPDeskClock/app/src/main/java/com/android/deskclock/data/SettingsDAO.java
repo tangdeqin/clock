@@ -202,6 +202,20 @@ final class SettingsDAO {
     }
 
     /**
+     * @return whether Turn over to mute is enabled. false by default.
+     */
+    static boolean getTurnOverToMute(SharedPreferences prefs) {
+        return prefs.getBoolean(SettingsActivity.KEY_TURN_OVER_TO_MUTE, false);
+    }
+
+    /**
+     * @param enabled whether Turn over to mute will be ture.
+     */
+    static void setTurnOverToMute(SharedPreferences prefs, boolean enabled) {
+        prefs.edit().putBoolean(SettingsActivity.KEY_TURN_OVER_TO_MUTE, enabled).apply();
+    }
+
+    /**
      * @param uri the uri of the ringtone to play for all timers
      */
     static void setTimerRingtoneUri(SharedPreferences prefs, Uri uri) {

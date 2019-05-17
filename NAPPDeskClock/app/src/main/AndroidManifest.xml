@@ -72,6 +72,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeskClock"
         android:resizeableActivity="false">
+        <!--add by yeqing.lv for T1 theme-->
+        <meta-data
+            android:name="tct.theme.apply"
+            android:value="true" />
 
         <!-- ============================================================== -->
         <!-- Main app components.                                           -->
@@ -298,7 +302,7 @@
         <!-- App widget components.                                         -->
         <!-- ============================================================== -->
 
-        <receiver
+        <!--<receiver
             android:name="com.android.alarmclock.AnalogAppWidgetProvider"
             android:label="@string/analog_gadget">
             <intent-filter>
@@ -311,7 +315,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/analog_appwidget" />
-        </receiver>
+        </receiver>-->
 
         <receiver
             android:name="com.android.alarmclock.DigitalAppWidgetProvider"

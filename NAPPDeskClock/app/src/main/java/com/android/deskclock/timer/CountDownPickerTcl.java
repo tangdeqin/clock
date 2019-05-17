@@ -10,8 +10,8 @@ import android.text.format.DateUtils;
 
 import com.android.deskclock.R;
 import com.android.deskclock.FabContainer;
-//import com.jrdcom.timetool.MyLog;
-import com.android.deskclock.timer.VerticalTextPicker.OnChangedListener;
+import com.android.deskclock.VerticalTextPicker;
+import com.android.deskclock.VerticalTextPicker.OnChangedListener;
 import static com.android.deskclock.FabContainer.FAB_SHRINK_AND_EXPAND;
 import static com.android.deskclock.FabContainer.FAB_REQUEST_FOCUS;
 
@@ -64,7 +64,6 @@ public class CountDownPickerTcl extends LinearLayout {
     
     // modified by haifeng.tang Pr 785760 
     private void initLayout() {
-        //MyLog.debug("inflate layout success", getClass());
 
         mHourPicker = (VerticalTextPicker) findViewById(R.id.timerpicker_hour);
         mHourPicker.setRange(0, 59);
@@ -77,7 +76,6 @@ public class CountDownPickerTcl extends LinearLayout {
         mSecondPicker = (VerticalTextPicker) findViewById(R.id.timerpicker_second);
         mSecondPicker.setRange(0, 59);
         mSecondPicker.setOnChangeListener(mChangedListener);
-        //MyLog.debug("inflate layout end", getClass());
 
         init(0, 0, 0, null);
         if (!isEnabled()) {
@@ -88,9 +86,7 @@ public class CountDownPickerTcl extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        // add by haifeng.tang Pr 785760  begin
         initLayout();
-        // add by haifeng.tang Pr 785760  end
     }
 
   public void setFabContainer(FabContainer fabContainer) {

@@ -32,6 +32,13 @@
 /*
 package com.android.deskclock.alarms;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -39,8 +46,13 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.storage.IStorageManager;
 import android.os.storage.StorageManager;
+import android.text.TextUtils;
 
 import com.android.deskclock.LogUtils;
+import com.android.deskclock.provider.AlarmInstance;
+
+import java.io.File;
+import java.io.IOException;
 
 @SuppressWarnings("PMD")
 public class PowerOffAlarm {

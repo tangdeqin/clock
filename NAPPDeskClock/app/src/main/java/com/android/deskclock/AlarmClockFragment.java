@@ -183,6 +183,10 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     @Override
     public void onStart() {
         super.onStart();
+
+        if (!isTabSelected()) {
+            //TimePickerDialogFragment.removeTimeEditDialog(getFragmentManager());
+        }
     }
 
     @Override
@@ -386,7 +390,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     @Override
     public void onUpdateFab(@NonNull ImageView fab) {
         fab.setVisibility(View.VISIBLE);
-        fab.setImageResource(R.drawable.ic_add_white_24dp);
+        fab.setImageResource(R.drawable.ic_clock_add);
         fab.setContentDescription(fab.getResources().getString(R.string.button_alarms));
     }
 

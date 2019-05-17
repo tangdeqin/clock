@@ -45,8 +45,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3">
-
-                    <Button
+                    <!--remove timer label by yeqing.lv for XR7685084 on 2019-5-8-->
+                    <!--<Button
                         android:id="@+id/timer_label"
                         style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                         android:maxLines="1"
                         android:minHeight="@dimen/touch_target_min_size"
                         android:minWidth="@dimen/touch_target_min_size"
-                        android:textAppearance="@style/SecondaryLabelTextAppearance" />
+                        android:textAppearance="@style/SecondaryLabelTextAppearance" />-->
 
                 </FrameLayout>
 

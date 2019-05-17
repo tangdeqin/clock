@@ -48,28 +48,41 @@ public final class City {
     /** A cached upper case form of the {@link #mName} used in case-insensitive name comparisons. */
     private String mNameUpperCase;
 
+    //begin zhixiong.liu.hz for task7685084 20190508 
+    private int mLongitude;
+    private int mLatitude;
+    //end zhixiong.liu.hz for task7685084 20190508 
     /**
      * A cached upper case form of the {@link #mName} used in case-insensitive name comparisons
      * which ignore {@link #removeSpecialCharacters(String)} special characters.
      */
     private String mNameUpperCaseNoSpecialCharacters;
-
-    City(String id, int index, String indexString, String name, String phoneticName, TimeZone tz) {
+    //begin zhixiong.liu.hz for task7685084 20190508 
+    City(String id, int index, String indexString, String name, String phoneticName, TimeZone tz, int longitude, int latitude) {
         mId = id;
         mIndex = index;
         mIndexString = indexString;
         mName = name;
         mPhoneticName = phoneticName;
         mTimeZone = tz;
-    }
 
+        mLongitude = longitude;
+        mLatitude = latitude;
+
+    }
+    //end zhixiong.liu.hz for task7685084 20190508 
     public String getId() { return mId; }
     public int getIndex() { return mIndex; }
     public String getName() { return mName; }
     public TimeZone getTimeZone() { return mTimeZone; }
     public String getIndexString() { return mIndexString; }
     public String getPhoneticName() { return mPhoneticName; }
-
+    
+    //begin zhixiong.liu.hz for task7685084 20190508 
+    public int getLongitude() { return mLongitude; }
+    public int getLatitude() { return mLatitude; }
+    //end zhixiong.liu.hz for task7685084 20190508 
+    
     /**
      * @return the city name converted to upper case
      */

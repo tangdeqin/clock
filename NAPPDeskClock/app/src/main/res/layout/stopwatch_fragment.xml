@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             app:layout_aspectRatio="100%"
             app:layout_heightPercent="@fraction/timer_circle_height_percent"
-            app:layout_widthPercent="@fraction/timer_circle_width_percent">
+            app:layout_widthPercent="@fraction/stopwatch_circle_width_percent">
 
             <include layout="@layout/stopwatch_time" />
 

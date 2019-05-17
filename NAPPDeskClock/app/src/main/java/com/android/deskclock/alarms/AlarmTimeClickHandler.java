@@ -42,7 +42,9 @@ import java.util.Calendar;
 public final class AlarmTimeClickHandler {
 
     private static final LogUtils.Logger LOGGER = new LogUtils.Logger("AlarmTimeClickHandler");
+
     private static final String KEY_PREVIOUS_DAY_MAP = "previousDayMap";
+
     private final Fragment mFragment;
     private final Context mContext;
     private final AlarmUpdateHandler mAlarmUpdateHandler;

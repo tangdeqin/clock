@@ -36,7 +36,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class TimePickerActivity extends BaseActivity implements View.OnClickListener,
-              LabelDialogFragment.AlarmLabelDialogHandlerT{
+              LabelDialogFragment.AlarmLabelDialogHandlerT,DeleteAndBackDialogFragment.AlarmBackDialogHandler,
+              DeleteAndBackDialogFragment.AlarmDeleteDialogHandler{
     private static final String TAG = "TimePickerActivity";
     private static final String ARG_HOUR = TAG + "_hour";
     private static final String ARG_MINUTE = TAG + "_minute";
@@ -74,8 +75,6 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         mLabelTv = findViewById(R.id.edit_label);
         mDeteleTv = findViewById(R.id.deletetv);
         buildEachdayButton();
-        final Drawable labelIcon = Utils.getVectorDrawable(this, R.drawable.ic_label);
-        mLabelTv.setCompoundDrawablesRelativeWithIntrinsicBounds(labelIcon, null, null, null);
 
         final Calendar now = Calendar.getInstance();
         Intent intent = getIntent();
@@ -102,10 +101,8 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
             final Drawable icon = Utils.getVectorDrawable(this,
                     silent ? R.drawable.ic_ringtone_silent : R.drawable.ic_ringtone);
             mRingtoneTv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
-            final Drawable deleteIcon = Utils.getVectorDrawable(this, R.drawable.ic_delete_small);
             mVibtareSc.setChecked(mAlarmStateOfStart.VibrateState);
             mLabelTv.setText(mAlarmStateOfStart.label);
-            mDeteleTv.setCompoundDrawablesRelativeWithIntrinsicBounds(deleteIcon, null, null, null);
 
         }
         else{
@@ -191,7 +188,6 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         final LabelDialogFragment fragment =
                 LabelDialogFragment.newInstance(alarm, alarm.label, TAG);
         LabelDialogFragment.show(this.getFragmentManager(), fragment);
-
     }
     public void setAlarmVibrationEnabled(boolean newState) {
         mVibrateState = newState ;
@@ -224,12 +220,18 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
        final List<Integer> weekdays = DataModel.getDataModel().getWeekdayOrder().getCalendarDays();
        for (int i = 0; i < weekdays.size(); i++) {
            if (alarm.daysOfWeek.isBitOn(weekdays.get(i))) {
+               Drawable icon = Utils.getVectorDrawable(dayButtons[i].getContext(), R.drawable.ic_repeat_bg);
+               dayButtons[i].setBackground(icon);
                dayButtons[i].setChecked(true);
                dayButtons[i].setTextColor(ThemeUtils.resolveColor(this,
                        android.R.attr.windowBackground));
+
            } else {
+               Drawable icon = Utils.getVectorDrawable(dayButtons[i].getContext(), R.drawable.ic_repeat_bg_line);
+               dayButtons[i].setBackground(icon);
                dayButtons[i].setChecked(false);
                dayButtons[i].setTextColor(Color.WHITE);
+
            }
        }
    }
@@ -276,16 +278,7 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         mRingtoneTv.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
     }
     public void deleteAlarm(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("确定删除吗？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlarmClockFragment.deleteItem(alarm);
-                        finish();
-                    }
-                }).setNegativeButton("放弃", null)
-                .create().show();
+        createDeleteDilag();
     }
 
     public void setRepeatDaysVisble(){
@@ -315,24 +308,43 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
     public void pressBackButton(){
         if(isChangedOfSetting()==false){
             finish();
-        }else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("保存更改？")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            setAlarm();
-                            AlarmClockFragment.onTimeSet(alarm);
-                            finish();
-                        }
-                    }).setNegativeButton("放弃", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            }).create().show();
+        }
+        else {
+            createBackDilag();
         }
     }
+
+    public void createBackDilag(){
+        final DeleteAndBackDialogFragment fragment =
+                DeleteAndBackDialogFragment.newInstance("back");
+        DeleteAndBackDialogFragment.show(this.getFragmentManager(), fragment);
+    }
+
+    public void createDeleteDilag(){
+        final DeleteAndBackDialogFragment fragment =
+                DeleteAndBackDialogFragment.newInstance("delete");
+        DeleteAndBackDialogFragment.show(this.getFragmentManager(), fragment);
+    }
+    @Override
+    public void onSetStoreOk(){
+        setAlarm();
+        AlarmClockFragment.onTimeSet(alarm);
+        finish();
+    }
+    @Override
+    public  void onSetStoreKo(){
+        finish();
+    }
+
+    @Override
+    public void onSetDeleteOk(){
+        AlarmClockFragment.deleteItem(alarm);
+        finish();
+    }
+    @Override
+    public  void onSetDeleteKo(){
+    }
+
     public Boolean isChangedOfSetting(){
         Boolean isChanged = false;
         if(mAlarmStateOfStart.hour != timePicker.getCurrentHour()){
@@ -341,16 +353,16 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         if(mAlarmStateOfStart.minute != timePicker.getCurrentMinute()){
             isChanged = true;
         }
-        if (mAlarmStateOfStart.daysofweek != alarm.daysOfWeek){
+        if (!mAlarmStateOfStart.daysofweek.equals(alarm.daysOfWeek)){
             isChanged = true;
         }
-        if(mAlarmStateOfStart.RingtoneUri != mRingtoneUri){
+        if(!mAlarmStateOfStart.RingtoneUri.equals(mRingtoneUri) ){
             isChanged = true;
         }
         if(mAlarmStateOfStart.VibrateState != mVibrateState){
             isChanged = true;
         }
-        if (mAlarmStateOfStart.label != mLabelText.trim()){
+        if (!mAlarmStateOfStart.label.trim().equals(mLabelText.trim())){
             isChanged = true;
         }
         return isChanged;
@@ -363,5 +375,9 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         Uri RingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         Boolean VibrateState = false;
         String label = "";
+    }
+    @Override
+    public void onBackPressed() {
+        pressBackButton();
     }
 }

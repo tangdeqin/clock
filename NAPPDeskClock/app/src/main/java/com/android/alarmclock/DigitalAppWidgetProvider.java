@@ -81,7 +81,7 @@ import static java.lang.Math.round;
  * If an alarm is scheduled to ring in the future:
  * <pre>
  *         12:59 AM
- * WED, FEB 3 ⏰ THU 9:30 AM
+ * WED, FEB 3 THU 9:30 AM
  * </pre>
  *
  * If no alarm is scheduled to ring in the future:
@@ -195,7 +195,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final RemoteViews landscape = relayoutWidget(context, wm, widgetId, options, false);
         final RemoteViews widget = new RemoteViews(landscape, portrait);
         wm.updateAppWidget(widgetId, widget);
-        wm.notifyAppWidgetViewDataChanged(widgetId, R.id.world_city_list);
+        //wm.notifyAppWidgetViewDataChanged(widgetId, R.id.world_city_list);
     }
 
     /**
@@ -216,10 +216,16 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
 
         // Configure child views of the remote view.
         final CharSequence dateFormat = getDateFormat(context);
-        rv.setCharSequence(R.id.date, "setFormat12Hour", dateFormat);
-        rv.setCharSequence(R.id.date, "setFormat24Hour", dateFormat);
+        rv.setCharSequence(R.id.date_main, "setFormat12Hour", dateFormat);
+        rv.setCharSequence(R.id.date_main, "setFormat24Hour", dateFormat);
 
-        final String nextAlarmTime = Utils.getNextAlarm(context);
+        rv.setCharSequence(R.id.date_sub, "setFormat12Hour", dateFormat);
+        rv.setCharSequence(R.id.date_sub, "setFormat24Hour", dateFormat);
+        
+        rv.setTextViewText(R.id.city_main, getCityString());
+        rv.setString(R.id.date_sub, "setTimeZone", DataModel.getDataModel().getHomeCity().getTimeZone().getID());
+        rv.setString(R.id.clock_sub, "setTimeZone", DataModel.getDataModel().getHomeCity().getTimeZone().getID());
+        /*final String nextAlarmTime = Utils.getNextAlarm(context);
         if (TextUtils.isEmpty(nextAlarmTime)) {
             rv.setViewVisibility(R.id.nextAlarm, GONE);
             rv.setViewVisibility(R.id.nextAlarmIcon, GONE);
@@ -227,7 +233,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
             rv.setTextViewText(R.id.nextAlarm, nextAlarmTime);
             rv.setViewVisibility(R.id.nextAlarm, VISIBLE);
             rv.setViewVisibility(R.id.nextAlarmIcon, VISIBLE);
-        }
+        }*/
 
         if (options == null) {
             options = wm.getAppWidgetOptions(widgetId);
@@ -246,21 +252,27 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
                 resources.getDimensionPixelSize(R.dimen.widget_max_clock_font_size);
 
         // Create a size template that describes the widget bounds.
-        final Sizes template = new Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx);
+        final Sizes template = new Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx/2);
 
         // Compute optimal font sizes and icon sizes to fit within the widget bounds.
-        final Sizes sizes = optimizeSizes(context, template, nextAlarmTime);
+        //final Sizes sizes = optimizeSizes(context, template, nextAlarmTime);
+        final Sizes sizes = optimizeSizes(context, template, null);
         if (LOGGER.isVerboseLoggable()) {
             LOGGER.v(sizes.toString());
         }
 
         // Apply the computed sizes to the remote views.
-        rv.setImageViewBitmap(R.id.nextAlarmIcon, sizes.mIconBitmap);
-        rv.setTextViewTextSize(R.id.date, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setTextViewTextSize(R.id.nextAlarm, COMPLEX_UNIT_PX, sizes.mFontSizePx);
-        rv.setTextViewTextSize(R.id.clock, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
+        //rv.setImageViewBitmap(R.id.nextAlarmIcon, sizes.mIconBitmap);
+        rv.setTextViewTextSize(R.id.date_main, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(R.id.city_main, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(R.id.clock_main, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
 
-        final int smallestWorldCityListSizePx =
+        rv.setTextViewTextSize(R.id.date_sub, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(R.id.city_sub, COMPLEX_UNIT_PX, sizes.mFontSizePx);
+        rv.setTextViewTextSize(R.id.clock_sub, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
+        
+
+        /*final int smallestWorldCityListSizePx =
                 resources.getDimensionPixelSize(R.dimen.widget_min_world_city_list_size);
         if (sizes.getListHeight() <= smallestWorldCityListSizePx) {
             // Insufficient space; hide the world city list.
@@ -279,7 +291,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
                 final PendingIntent pi = PendingIntent.getActivity(context, 0, selectCity, 0);
                 rv.setPendingIntentTemplate(R.id.world_city_list, pi);
             }
-        }
+        }*/
 
         return rv;
     }
@@ -292,16 +304,19 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         // Inflate a test layout to compute sizes at different font sizes.
         final LayoutInflater inflater = LayoutInflater.from(context);
         @SuppressLint("InflateParams")
-        final View sizer = inflater.inflate(R.layout.digital_widget_sizer, null /* root */);
-
+        //final View sizer = inflater.inflate(R.layout.digital_widget_sizer, null /* root */);
+        final View sizer = inflater.inflate(R.layout.digital_widget, null /* root */);
         // Configure the date to display the current date string.
         final CharSequence dateFormat = getDateFormat(context);
-        final TextClock date = (TextClock) sizer.findViewById(R.id.date);
-        date.setFormat12Hour(dateFormat);
-        date.setFormat24Hour(dateFormat);
+        final TextClock date_main = (TextClock) sizer.findViewById(R.id.date_main);
+        date_main.setFormat12Hour(dateFormat);
+        date_main.setFormat24Hour(dateFormat);
+        final TextClock date_sub = (TextClock) sizer.findViewById(R.id.date_sub);
+        date_sub.setFormat12Hour(dateFormat);
+        date_sub.setFormat24Hour(dateFormat);
 
         // Configure the next alarm views to display the next alarm time or be gone.
-        final TextView nextAlarmIcon = (TextView) sizer.findViewById(R.id.nextAlarmIcon);
+        /*final TextView nextAlarmIcon = (TextView) sizer.findViewById(R.id.nextAlarmIcon);
         final TextView nextAlarm = (TextView) sizer.findViewById(R.id.nextAlarm);
         if (TextUtils.isEmpty(nextAlarmTime)) {
             nextAlarm.setVisibility(GONE);
@@ -311,7 +326,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
             nextAlarm.setVisibility(VISIBLE);
             nextAlarmIcon.setVisibility(VISIBLE);
             nextAlarmIcon.setTypeface(UiDataModel.getUiDataModel().getAlarmIconTypeface());
-        }
+        }*/
 
         // Measure the widget at the largest possible size.
         Sizes high = measure(template, template.getLargestClockFontSizePx(), sizer);
@@ -400,19 +415,30 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final Sizes measuredSizes = template.newSize();
 
         // Configure the clock to display the widest time string.
-        final TextClock date = (TextClock) sizer.findViewById(R.id.date);
-        final TextClock clock = (TextClock) sizer.findViewById(R.id.clock);
-        final TextView nextAlarm = (TextView) sizer.findViewById(R.id.nextAlarm);
-        final TextView nextAlarmIcon = (TextView) sizer.findViewById(R.id.nextAlarmIcon);
+        final TextClock date_main = (TextClock) sizer.findViewById(R.id.date_main);
+        final TextClock clock_main = (TextClock) sizer.findViewById(R.id.clock_main);
+        final TextView city_main = (TextView) sizer.findViewById(R.id.city_main);
+        
+        final TextClock date_sub = (TextClock) sizer.findViewById(R.id.date_sub);
+        final TextClock clock_sub = (TextClock) sizer.findViewById(R.id.clock_sub);
+        final TextView city_sub = (TextView) sizer.findViewById(R.id.city_sub);
+        //final TextView nextAlarm = (TextView) sizer.findViewById(R.id.nextAlarm);
+        //final TextView nextAlarmIcon = (TextView) sizer.findViewById(R.id.nextAlarmIcon);
 
         // Adjust the font sizes.
         measuredSizes.setClockFontSizePx(clockFontSize);
-        clock.setText(getLongestTimeString(clock));
-        clock.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
-        date.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
-        nextAlarm.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
-        nextAlarmIcon.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mIconFontSizePx);
-        nextAlarmIcon.setPadding(measuredSizes.mIconPaddingPx, 0, measuredSizes.mIconPaddingPx, 0);
+        //clock_main.setText(getLongestTimeString(clock_main));
+        clock_main.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
+        date_main.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        city_main.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        
+        //clock_sub.setText(getLongestTimeString(clock_sub));
+        clock_sub.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx);
+        date_sub.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        city_sub.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        //nextAlarm.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx);
+        //nextAlarmIcon.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mIconFontSizePx);
+        //nextAlarmIcon.setPadding(measuredSizes.mIconPaddingPx, 0, measuredSizes.mIconPaddingPx, 0);
 
         // Measure and layout the sizer.
         final int widthSize = View.MeasureSpec.getSize(measuredSizes.mTargetWidthPx);
@@ -425,13 +451,13 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         // Copy the measurements into the result object.
         measuredSizes.mMeasuredWidthPx = sizer.getMeasuredWidth();
         measuredSizes.mMeasuredHeightPx = sizer.getMeasuredHeight();
-        measuredSizes.mMeasuredTextClockWidthPx = clock.getMeasuredWidth();
-        measuredSizes.mMeasuredTextClockHeightPx = clock.getMeasuredHeight();
+        measuredSizes.mMeasuredTextClockWidthPx = clock_main.getMeasuredWidth();
+        measuredSizes.mMeasuredTextClockHeightPx = clock_main.getMeasuredHeight();
 
         // If an alarm icon is required, generate one from the TextView with the special font.
-        if (nextAlarmIcon.getVisibility() == VISIBLE) {
-            measuredSizes.mIconBitmap = Utils.createBitmap(nextAlarmIcon);
-        }
+        //if (nextAlarmIcon.getVisibility() == VISIBLE) {
+        //    measuredSizes.mIconBitmap = Utils.createBitmap(nextAlarmIcon);
+        //}
 
         return measuredSizes;
     }
@@ -448,6 +474,18 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         return DateFormat.format(format, longestPMTime);
     }
 
+
+    
+    private static  String getCityString(){
+        String localtimezone = Calendar.getInstance().getTimeZone().getID();
+        List<City> allCities = DataModel.getDataModel().getAllCities();
+        for (City city : allCities){
+            if(localtimezone.equals(city.getTimeZone().getID())){
+                 return  city.getName();
+            }
+        }
+        return localtimezone;
+    }
     /**
      * @return the locale-specific date pattern
      */
@@ -495,7 +533,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         private int getClockFontSizePx() { return mClockFontSizePx; }
         private void setClockFontSizePx(int clockFontSizePx) {
             mClockFontSizePx = clockFontSizePx;
-            mFontSizePx = max(1, round(clockFontSizePx / 7.5f));
+            mFontSizePx = max(1, round(clockFontSizePx / 4.0f));
             mIconFontSizePx = (int) (mFontSizePx * 1.4f);
             mIconPaddingPx = mFontSizePx / 3;
         }

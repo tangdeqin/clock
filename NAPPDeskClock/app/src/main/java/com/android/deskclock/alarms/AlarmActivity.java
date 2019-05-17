@@ -23,6 +23,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -49,24 +51,15 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
-//add by junye.li for defect 2407806 begin
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Message;
 import android.os.PowerManager;
-import android.provider.Settings;
-//add by junye.li for defect 2407806 end
-
-// add by kangsen.chen for defect 2791981 20160830 begin
-import android.content.SharedPreferences;
-// add by kangsen.chen for defect 2791981 20160830 end
-
 import com.android.deskclock.AnimatorUtils;
 import com.android.deskclock.BaseActivity;
 import com.android.deskclock.LogUtils;
-import android.util.Log;
 
 import com.android.deskclock.R;
 import com.android.deskclock.ThemeUtils;
@@ -685,22 +678,17 @@ public class AlarmActivity extends BaseActivity
     private Sensor mSensor;
     private boolean mIsgetZ = false;
     private boolean mIsFaceDown = false;
-    private boolean mSnoozeEnable;
     private double mCurrentDegree = 0;
-    private static final int ALARM_SNOOZE_OR_DISSMISS = 100;
-    private static final int DELAY_SNOOZE_DISSMISS_TIME = 450;
+    private static final int ALARM_TURN_OVER_TO_MUTE = 100;
+    private static final int DELAY_TURN_OVER_TO_MUTE_TIME = 450;
     private static final double DELTA_DEGREE = 2.5;
     private void regSensor() {
-        mGestureEnable = (Settings.Global.getInt(getContentResolver(), "alarm_turnover_enable", 1) == 1);
-        Log.d("deqin.tang","mGestureEnable"+mGestureEnable);
-       mSnoozeEnable = (Settings.Global.getInt(getContentResolver(),
-                                       "snooze_enable", 1) == 1);
+        mGestureEnable = DataModel.getDataModel().getTurnOverToMute();
         // Turn over the phone to mute the alarm
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         this.mIsgetZ = false;
         if (mGestureEnable) {
-           Log.d("deqin.tang","mGestureEnable2");
             mSensorEventListener = new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
@@ -729,7 +717,7 @@ public class AlarmActivity extends BaseActivity
                     /* If degrees is this, send alarm snooze or dimiss mesage */
                     if ((mIsFaceDown == false && degrees >= 160 && degrees <= 180)
                             || (mIsFaceDown == true && degrees >= 0 && degrees <= 20)) {
-                        sendSnoozeDismissMessage(degrees);
+                        sendMuteMessage(degrees);
                         //Added by kangsen.chen for Defect 3531882 on 2016/11/21 begin
                         mSensorManager.unregisterListener(mSensorEventListener, mSensor);
                         //Added by kangsen.chen for Defect 3531882 on 2016/11/21 end
@@ -744,10 +732,10 @@ public class AlarmActivity extends BaseActivity
         }
     }
 
-    private void sendSnoozeDismissMessage(double degree) {
+    private void sendMuteMessage(double degree) {
         if (mSensorHandler != null) {
-            mSensorHandler.sendMessageDelayed(mSensorHandler.obtainMessage(ALARM_SNOOZE_OR_DISSMISS, degree),
-                    DELAY_SNOOZE_DISSMISS_TIME);
+            mSensorHandler.sendMessageDelayed(mSensorHandler.obtainMessage(ALARM_TURN_OVER_TO_MUTE, degree),
+                    DELAY_TURN_OVER_TO_MUTE_TIME);
         }
     }
     private Handler mSensorHandler = new Handler() {
@@ -755,8 +743,8 @@ public class AlarmActivity extends BaseActivity
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case ALARM_SNOOZE_OR_DISSMISS:
-                    handleAlarmSnoozeDissmissMessage(msg);
+                case ALARM_TURN_OVER_TO_MUTE:
+                    handleAlarmMuteMessage(msg);
                     break;
 
                 default:
@@ -764,21 +752,18 @@ public class AlarmActivity extends BaseActivity
             }
         }
     };
-    private void handleAlarmSnoozeDissmissMessage(Message msg) {
+    private void handleAlarmMuteMessage(Message msg) {
         double lastDegree = (Double) msg.obj;
         if (Math.abs(lastDegree - mCurrentDegree) <= DELTA_DEGREE) {
-            mSensorHandler.removeMessages(ALARM_SNOOZE_OR_DISSMISS);
+            mSensorHandler.removeMessages(ALARM_TURN_OVER_TO_MUTE);
             PowerManager powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
             boolean isScreenOn = powerManager != null
                     && powerManager.isScreenOn();
             if (!isScreenOn) {
                 return;
             }
-           if (mSnoozeEnable) {
-                snooze();
-            }else{
-                    dismiss();
-            }
+            snooze();
         }
     }
+
 }

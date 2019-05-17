@@ -94,6 +94,9 @@ final class CityDAO {
     static Map<String, City> getCities(Context context) {
         final Resources resources = context.getResources();
         final TypedArray cityStrings = resources.obtainTypedArray(R.array.city_ids);
+        //begin zhixiong.liu.hz add for test
+        final String[] cityLngLat = resources.getStringArray(R.array.city_LngLat);
+        //end zhixiong.liu.hz add for test
         final int citiesCount = cityStrings.length();
 
         final Map<String, City> cities = new ArrayMap<>(citiesCount);
@@ -121,8 +124,19 @@ final class CityDAO {
                             "Error parsing malformed city %s", cityString);
                     throw new IllegalStateException(message);
                 }
+                //begin zhixiong.liu.hz for task7685084 20190508
+                int Lng = 0;
+                int Lat = 0;
+                if(cityLngLat[i] != null){
+                   final String[] LngLat = cityLngLat[i].split("[|]");
+                   Lng = Integer.valueOf(LngLat[0]);
+                   Lat = Integer.valueOf(LngLat[1]);
+                }
 
-                final City city = createCity(id, cityParts[0], cityParts[1]);
+                final City city = createCity(id, cityParts[0], cityParts[1], Lng, Lat);
+                //inal City city = createCity(id, cityParts[0], cityParts[1]);
+                //end zhixiong.liu.hz for task7685084 20190508
+      
                 // Skip cities whose timezone cannot be resolved.
                 if (city != null) {
                     cities.put(id, city);
@@ -143,7 +157,9 @@ final class CityDAO {
      * @param tzId the string id of the timezone a given city is located in
      */
     @VisibleForTesting
-    static City createCity(String id, String formattedName, String tzId) {
+    //begin zhixiong.liu.hz for task7685084 20190508
+    static City createCity(String id, String formattedName, String tzId, int lng, int lat) {
+        
         final TimeZone tz = TimeZone.getTimeZone(tzId);
         // If the time zone lookup fails, GMT is returned. No cities actually map to GMT.
         if ("GMT".equals(tz.getID())) {
@@ -156,11 +172,13 @@ final class CityDAO {
         // if one is not explicitly provided.
         final String indexString = TextUtils.isEmpty(parts[0])
                 ? name.substring(0, 1) : parts[0];
+
         final String phoneticName = parts.length == 3 ? parts[2] : name;
 
         final Matcher matcher = NUMERIC_INDEX_REGEX.matcher(indexString);
         final int index = matcher.find() ? Integer.parseInt(matcher.group()) : -1;
 
-        return new City(id, index, indexString, name, phoneticName, tz);
+        return new City(id, index, indexString, name, phoneticName, tz,lng, lat);
     }
+    //end zhixiong.liu.hz for task7685084 20190508 
 }

@@ -31,7 +31,10 @@
     <color name="hairline">#28FFFFFF</color>
 
     <color name="clock_gray">#B3FFFFFF</color>
-    
+
+    <color name="stopwatch_dot_color">#FF2C7EBD</color>
+    <color name="timer_circle_completed_color">#FFD8D8D8</color>
+
     <!-- shadowColor for widget text -->
     <color name="widget_shadow_color">#67000000</color>
     <color name="timer_shadow_color">#e0000000</color>
@@ -42,4 +45,5 @@
     <color name="white_labelbg">#FFFFFFFF</color>
     <color name="white_labeltitle">#DE000000</color>
     <color name="white_labeltext">#FF268BE1</color>
+    <color name="alarm_timepick_line">#FF2C7EBD</color>
 </resources>

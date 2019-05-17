@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.ListPreferenceDialogFragmentCompat;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.TwoStatePreference;
@@ -42,6 +43,7 @@ import com.android.deskclock.data.DataModel;
 import com.android.deskclock.data.TimeZones;
 import com.android.deskclock.data.Weekdays;
 import com.android.deskclock.ringtone.RingtonePickerActivity;
+import android.media.AudioManager;//add by yeqing.lv for XR7685084 on 2019-5-7
 
 /**
  * Settings for the Alarm Clock.
@@ -54,6 +56,7 @@ public final class SettingsActivity extends BaseActivity {
     public static final String KEY_TIMER_RINGTONE = "timer_ringtone";
     public static final String KEY_TIMER_VIBRATE = "timer_vibrate";
     public static final String KEY_AUTO_SILENCE = "auto_silence";
+    public static final String KEY_CLOCK_SETTINGS = "clock_settings";
     public static final String KEY_CLOCK_STYLE = "clock_style";
     public static final String KEY_CLOCK_DISPLAY_SECONDS = "display_clock_seconds";
     public static final String KEY_HOME_TZ = "home_time_zone";
@@ -61,6 +64,8 @@ public final class SettingsActivity extends BaseActivity {
     public static final String KEY_DATE_TIME = "date_time";
     public static final String KEY_VOLUME_BUTTONS = "volume_button_setting";
     public static final String KEY_WEEK_START = "week_start";
+    public static final String KEY_ALARM_VOLUME = "volume_setting";//add by yeqing.lv for task5238340
+    public static final String KEY_TURN_OVER_TO_MUTE = "turn_over_to_mute";
 
     public static final String DEFAULT_VOLUME_BEHAVIOR = "0";
     public static final String VOLUME_BEHAVIOR_SNOOZE = "1";
@@ -80,7 +85,6 @@ public final class SettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-
         mOptionsMenuManager.addMenuItemController(new NavUpMenuItemController(this))
                 .addMenuItemController(MenuItemControllerFactory.getInstance()
                         .buildMenuItemControllers(this));
@@ -91,6 +95,7 @@ public final class SettingsActivity extends BaseActivity {
                     .replace(R.id.main, new PrefsFragment(), PREFS_FRAGMENT_TAG)
                     .disallowAddToBackStack()
                     .commit();
+
         }
     }
 
@@ -136,6 +141,15 @@ public final class SettingsActivity extends BaseActivity {
         public void onCreatePreferences(Bundle bundle, String rootKey) {
             getPreferenceManager().setStorageDeviceProtected();
             addPreferencesFromResource(R.xml.settings);
+            //remove KEY_CLOCK_STYLE,KEY_CLOCK_DISPLAY_SECONDS by yeqing.lv for XR7685084 on 2019-5-7 begin
+            final SimpleMenuPreference clockStylePref = (SimpleMenuPreference)
+                    findPreference(KEY_CLOCK_STYLE);
+            ((PreferenceCategory)findPreference("clock_settings")).removePreference(
+                    findPreference(KEY_CLOCK_STYLE));
+            final Preference clockSecondsPref = findPreference(KEY_CLOCK_DISPLAY_SECONDS);
+            ((PreferenceCategory)findPreference("clock_settings")).removePreference(
+                    findPreference(KEY_CLOCK_DISPLAY_SECONDS));
+             //remove KEY_CLOCK_STYLE,KEY_CLOCK_DISPLAY_SECONDS by yeqing.lv for XR7685084 on 2019-5-7 end
             final Preference timerVibrate = findPreference(KEY_TIMER_VIBRATE);
             final boolean hasVibrator = ((Vibrator) timerVibrate.getContext()
                     .getSystemService(VIBRATOR_SERVICE)).hasVibrator();
@@ -168,12 +182,22 @@ public final class SettingsActivity extends BaseActivity {
                     final int index = preference.findIndexOfValue((String) newValue);
                     preference.setSummary(preference.getEntries()[index]);
                     break;
+                case KEY_CLOCK_SETTINGS:
                 case KEY_CLOCK_STYLE:
                 case KEY_WEEK_START:
+                    //modify by yeqing.lv for XR7685084 on 2019-5-7 begin
+                    final ListPreference weekStartPref = (ListPreference) pref;
+                    final int weekStartIndex = weekStartPref.findIndexOfValue((String) newValue);
+                    weekStartPref.setSummary(weekStartPref.getEntries()[weekStartIndex]);
+                    break;
                 case KEY_VOLUME_BUTTONS:
-                    final SimpleMenuPreference simpleMenuPreference = (SimpleMenuPreference) pref;
+                    /*final SimpleMenuPreference simpleMenuPreference = (SimpleMenuPreference) pref;
                     final int i = simpleMenuPreference.findIndexOfValue((String) newValue);
-                    pref.setSummary(simpleMenuPreference.getEntries()[i]);
+                    pref.setSummary(simpleMenuPreference.getEntries()[i]);*/
+                    final ListPreference volumeButtonsPref = (ListPreference) pref;
+                    final int volumeButtonsIndex = volumeButtonsPref.findIndexOfValue((String) newValue);
+                    volumeButtonsPref.setSummary(volumeButtonsPref.getEntries()[volumeButtonsIndex]);
+                    //modify by yeqing.lv for XR7685084 at 2019-5-7
                     break;
                 case KEY_CLOCK_DISPLAY_SECONDS:
                     DataModel.getDataModel().setDisplayClockSeconds((boolean) newValue);
@@ -193,6 +217,10 @@ public final class SettingsActivity extends BaseActivity {
                     break;
                 case KEY_TIMER_RINGTONE:
                     pref.setSummary(DataModel.getDataModel().getTimerRingtoneTitle());
+                    break;
+                case KEY_TURN_OVER_TO_MUTE:
+                    final TwoStatePreference turnovertomutePref = (TwoStatePreference) pref;
+                    DataModel.getDataModel().setTurnOverToMute(turnovertomutePref.isChecked());
                     break;
             }
             // Set result so DeskClock knows to refresh itself
@@ -216,6 +244,15 @@ public final class SettingsActivity extends BaseActivity {
                 case KEY_TIMER_RINGTONE:
                     startActivity(RingtonePickerActivity.createTimerRingtonePickerIntent(context));
                     return true;
+
+                //add by yeqing.lv for XR7685084 on 2019-5-7 begin
+                case KEY_ALARM_VOLUME:
+                    final AudioManager audioManager =
+                            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_ALARM,
+                            AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+                    return true;
+                //add by yeqing.lv for XR7685084 on 2019-5-7 end
             }
 
             return false;
@@ -264,19 +301,13 @@ public final class SettingsActivity extends BaseActivity {
             String delay = autoSilencePref.getValue();
             updateAutoSnoozeSummary(autoSilencePref, delay);
             autoSilencePref.setOnPreferenceChangeListener(this);
-
-            final SimpleMenuPreference clockStylePref = (SimpleMenuPreference)
-                    findPreference(KEY_CLOCK_STYLE);
-            clockStylePref.setSummary(clockStylePref.getEntry());
-            clockStylePref.setOnPreferenceChangeListener(this);
-
-            final SimpleMenuPreference volumeButtonsPref = (SimpleMenuPreference)
-                    findPreference(KEY_VOLUME_BUTTONS);
+            //modify by yeqing.lv for XR7685084 on 2019-5-7
+            //final SimpleMenuPreference volumeButtonsPref = (SimpleMenuPreference)
+                    //findPreference(KEY_VOLUME_BUTTONS);
+            final ListPreference volumeButtonsPref =
+                    (ListPreference) findPreference(KEY_VOLUME_BUTTONS);
             volumeButtonsPref.setSummary(volumeButtonsPref.getEntry());
             volumeButtonsPref.setOnPreferenceChangeListener(this);
-
-            final Preference clockSecondsPref = findPreference(KEY_CLOCK_DISPLAY_SECONDS);
-            clockSecondsPref.setOnPreferenceChangeListener(this);
 
             final Preference autoHomeClockPref = findPreference(KEY_AUTO_HOME_CLOCK);
             final boolean autoHomeClockEnabled =
@@ -293,9 +324,10 @@ public final class SettingsActivity extends BaseActivity {
 
             final Preference dateAndTimeSetting = findPreference(KEY_DATE_TIME);
             dateAndTimeSetting.setOnPreferenceClickListener(this);
-
-            final SimpleMenuPreference weekStartPref = (SimpleMenuPreference)
-                    findPreference(KEY_WEEK_START);
+            //modify by yeqing.lv for XR7685084 on 2019-5-7
+            /*final SimpleMenuPreference weekStartPref = (SimpleMenuPreference)
+                    findPreference(KEY_WEEK_START);*/
+            final ListPreference weekStartPref = (ListPreference) findPreference(KEY_WEEK_START);
             // Set the default value programmatically
             final Weekdays.Order weekdayOrder = DataModel.getDataModel().getWeekdayOrder();
             final Integer firstDay = weekdayOrder.getCalendarDays().get(0);
@@ -308,6 +340,10 @@ public final class SettingsActivity extends BaseActivity {
             final Preference timerRingtonePref = findPreference(KEY_TIMER_RINGTONE);
             timerRingtonePref.setOnPreferenceClickListener(this);
             timerRingtonePref.setSummary(DataModel.getDataModel().getTimerRingtoneTitle());
+            //add by yeqing.lv for XR7685084 on 2019-5-7 begin
+            final Preference volumePref = findPreference(KEY_ALARM_VOLUME);
+            volumePref.setOnPreferenceClickListener(this);
+            //add by yeqing.lv for XR7685084 on 2019-5-7 end
         }
 
         private void refreshListPreference(ListPreference preference) {

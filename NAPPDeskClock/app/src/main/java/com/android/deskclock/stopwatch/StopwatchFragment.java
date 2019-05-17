@@ -248,18 +248,10 @@ public final class StopwatchFragment extends DeskClockFragment {
 
     private void updateFab(@NonNull ImageView fab, boolean animate) {
         if (getStopwatch().isRunning()) {
-            if (animate) {
-                fab.setImageResource(R.drawable.ic_play_pause_animation);
-            } else {
-                fab.setImageResource(R.drawable.ic_play_pause);
-            }
+            fab.setImageResource(R.drawable.ic_timer_pause);
             fab.setContentDescription(fab.getResources().getString(R.string.sw_pause_button));
         } else {
-            if (animate) {
-                fab.setImageResource(R.drawable.ic_pause_play_animation);
-            } else {
-                fab.setImageResource(R.drawable.ic_pause_play);
-            }
+            fab.setImageResource(R.drawable.ic_timer_start);
             fab.setContentDescription(fab.getResources().getString(R.string.sw_start_button));
         }
         fab.setVisibility(VISIBLE);
@@ -435,7 +427,7 @@ public final class StopwatchFragment extends DeskClockFragment {
             mLapsAdapter.clearLaps();
         }
 
-        final boolean lapsVisible = mLapsAdapter.getItemCount() > 0;
+        final boolean lapsVisible = true;  // modify by tao.luo mLapsAdapter.getItemCount() > 0;
         mLapsList.setVisibility(lapsVisible ? VISIBLE : GONE);
 
         if (Utils.isPortrait(getActivity())) {

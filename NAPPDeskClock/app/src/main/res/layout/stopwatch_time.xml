@@ -33,7 +33,7 @@
         android:duplicateParentState="true"
         android:includeFontPadding="false"
         android:paddingEnd="3dp"
-        android:paddingStart="30dp"
+        android:paddingStart="60dp"
         android:textSize="70sp" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:duplicateParentState="true"
         android:fontFamily="sans-serif"
         android:includeFontPadding="false"
-        android:paddingEnd="30dp"
+        android:paddingEnd="60dp"
         android:paddingStart="3dp"
         android:textSize="30sp" />
 

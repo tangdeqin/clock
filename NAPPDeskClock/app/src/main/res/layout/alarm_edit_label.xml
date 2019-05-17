@@ -16,18 +16,19 @@
         android:textSize="@dimen/labeltext_font_size"
         android:layout_marginStart="@dimen/label_edittext_padding"/>
 
-    <android.support.v7.widget.AppCompatEditText
+    <EditText
         android:id="@+id/label_edit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/label_edittext_hight"
         android:textColor="@color/white_labeltitle"
         android:maxLines="1"
         android:maxLength="15"
-        android:drawableBottom="@drawable/line"
         android:layout_marginStart="@dimen/label_edittext_padding"
         android:layout_marginEnd="@dimen/label_edittext_padding"
         android:cursorVisible="true"
-        android:textCursorDrawable="@color/white_labeltext"/>
+        android:textCursorDrawable="@drawable/alarm_edit_label_cucor"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/label_ok_ko_hight"

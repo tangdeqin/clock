@@ -676,12 +676,29 @@ public final class DataModel {
         return mTimerModel.getTimerVibrate();
     }
 
+
     /**
      * @param enabled whether vibrate is enabled for all timers.
      */
     public void setTimerVibrate(boolean enabled) {
         enforceMainLooper();
         mTimerModel.setTimerVibrate(enabled);
+    }
+    /**
+     * @param enabled whetherturn over to mute is enabled
+     */
+
+    public void setTurnOverToMute(boolean enabled) {
+        enforceMainLooper();
+        mSettingsModel.setTurnOverToMute(enabled);
+    }
+
+    /**
+     * @return whether turn over to mute is enabled .
+     */
+    public boolean getTurnOverToMute() {
+        enforceMainLooper();
+        return mSettingsModel.getTurnOverToMute();
     }
 
     //

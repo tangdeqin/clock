@@ -18,6 +18,8 @@
     <!-- In portrait, -100% height implies only width is used to size the timer container. -->
     <fraction name="timer_circle_height_percent">-100%</fraction>
 
-    <!-- In portrait, timer circles are 60% of the container width; height matches width. -->
-    <fraction name="timer_circle_width_percent">60%</fraction>
+    <!-- In portrait, timer circles are 70% of the container width; height matches width. -->
+    <!--modify yeqing.lv for XR7685084 on 2019-5-8-->
+    <fraction name="timer_circle_width_percent">70%</fraction>
+    <fraction name="stopwatch_circle_width_percent">90%</fraction>
 </resources>

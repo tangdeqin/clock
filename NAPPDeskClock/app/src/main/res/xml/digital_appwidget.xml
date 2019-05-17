@@ -19,9 +19,7 @@
     android:initialLayout="@layout/loading_widget"
     android:minHeight="@dimen/min_digital_widget_height"
     android:minWidth="@dimen/min_digital_widget_width"
-    android:minResizeHeight="59dp"
-    android:minResizeWidth="136dp"
     android:previewImage="@drawable/appwidget_digital_clock_preview"
-    android:resizeMode="horizontal|vertical"
+    android:resizeMode="none"
     android:updatePeriodMillis="0"
     android:widgetCategory="keyguard|home_screen" />

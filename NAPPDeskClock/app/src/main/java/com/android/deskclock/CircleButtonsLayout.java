@@ -18,8 +18,7 @@ public class CircleButtonsLayout extends FrameLayout {
 
     private float mDiamOffset;
     private View mCircleView;
-    private Button mResetAddButton;
-    private TextView mLabel;
+    private Button mAddOneMinButton;
 
     @SuppressWarnings("unused")
     public CircleButtonsLayout(Context context) {
@@ -47,27 +46,25 @@ public class CircleButtonsLayout extends FrameLayout {
     }
 
     protected void remeasureViews() {
-        if (mLabel == null) {
             mCircleView = findViewById(R.id.timer_time);
-            mLabel = (TextView) findViewById(R.id.timer_label);
-            mResetAddButton = (Button) findViewById(R.id.reset_add);
-        }
+            //mLabel = (TextView) findViewById(R.id.timer_label);//remove timer label by yeqing.lv for XR7685084
+            mAddOneMinButton = (Button) findViewById(R.id.add_oneMin);
 
         final int frameWidth = mCircleView.getMeasuredWidth();
         final int frameHeight = mCircleView.getMeasuredHeight();
         final int minBound = Math.min(frameWidth, frameHeight);
         final int circleDiam = (int) (minBound - mDiamOffset);
 
-        if (mResetAddButton != null) {
-            final MarginLayoutParams resetAddParams = (MarginLayoutParams) mResetAddButton
+        if (mAddOneMinButton != null) {
+            final MarginLayoutParams resetAddParams = (MarginLayoutParams) mAddOneMinButton
                     .getLayoutParams();
             resetAddParams.bottomMargin = circleDiam / 6;
             if (minBound == frameWidth) {
                 resetAddParams.bottomMargin += (frameHeight - frameWidth) / 2;
             }
         }
-
-        if (mLabel != null) {
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 begin
+        /*if (mLabel != null) {
             MarginLayoutParams labelParams = (MarginLayoutParams) mLabel.getLayoutParams();
             labelParams.topMargin = circleDiam/6;
             if (minBound == frameWidth) {
@@ -125,6 +122,7 @@ public class CircleButtonsLayout extends FrameLayout {
              *     => w = 2 * sqrt((r + y)*(r - y))
              */
             // Radius of the circle.
+            /*
             int r = circleDiam / 2;
             // Y value of the top of the label, calculated from the center of the circle.
             int y = frameHeight / 2 - labelParams.topMargin;
@@ -133,5 +131,7 @@ public class CircleButtonsLayout extends FrameLayout {
 
             mLabel.setMaxWidth((int) w);
         }
+        */
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 end
     }
 }

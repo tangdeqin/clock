@@ -13,7 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
+<!--zhixiong.liu.hz for XR7685084 change layout follow ergo 20190508-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -27,36 +27,47 @@
         android:layout_weight="@integer/gutter_width_percent" />
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="@integer/guttered_content_width_percent"
-        android:gravity="center_vertical">
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+    
+            <include
+                layout="@layout/world_clock_city_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+    
+            <TextClock
+                android:id="@+id/digital_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:layout_gravity="end"
+                android:singleLine="true"
+                android:textAppearance="@style/world_clock_time"/>
+    
+            <com.android.deskclock.AnalogClock
+                android:id="@+id/analog_clock"
+                android:layout_width="@dimen/world_clock_analog_size"
+                android:layout_height="@dimen/world_clock_analog_size"
+                android:paddingStart="24dp"
+                android:layout_gravity="end"
+                android:layout_marginBottom="@dimen/bottom_text_spacing_analog_small" />    
+        </LinearLayout>        
 
-        <include
-            layout="@layout/world_clock_city_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextClock
-            android:id="@+id/digital_clock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="24dp"
-            android:layout_gravity="end"
-            android:singleLine="true"
-            android:textAppearance="@style/world_clock_time"/>
-
-        <com.android.deskclock.AnalogClock
-            android:id="@+id/analog_clock"
-            android:layout_width="@dimen/world_clock_analog_size"
-            android:layout_height="@dimen/world_clock_analog_size"
-            android:paddingStart="24dp"
-            android:layout_gravity="end"
-            android:layout_marginBottom="@dimen/bottom_text_spacing_analog_small" />
-
+        <View
+            android:id="@+id/hairline"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/hairline_height"
+            android:layout_marginTop="10dp"
+            android:background="@color/hairline" />
     </LinearLayout>
-
     <!-- Right gutter. -->
     <Space
         android:layout_width="0dp"

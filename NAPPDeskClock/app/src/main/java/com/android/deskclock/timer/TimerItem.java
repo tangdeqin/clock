@@ -49,11 +49,15 @@ public class TimerItem extends LinearLayout {
     /** Displays timer progress as a color circle that changes from white to red. */
     private TimerCircleView mCircleView;
 
+    //modify by yeqing.lv for XR7685084 on 2019-5-8 begin
     /** A button that either resets the timer or adds time to it, depending on its state. */
-    private Button mResetAddButton;
+    private Button mAddOneMinButton;
+    private Button mAddFiveMinButton;
+    private Button mAddTenMinButton;
+    //modify by yeqing.lv for XR7685084 on 2019-5-8 end
 
     /** Displays the label associated with the timer. Tapping it presents an edit dialog. */
-    private TextView mLabelView;
+    //private TextView mLabelView;//remove timer label by yeqing.lv for XR7685084
 
     /** The last state of the timer that was rendered; used to avoid expensive operations. */
     private Timer.State mLastState;
@@ -69,8 +73,12 @@ public class TimerItem extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mLabelView = (TextView) findViewById(R.id.timer_label);
-        mResetAddButton = (Button) findViewById(R.id.reset_add);
+        //modify by yeqing.lv for XR7685084 on 2019-5-8 begin
+        //mLabelView = (TextView) findViewById(R.id.timer_label);
+        mAddOneMinButton = (Button) findViewById(R.id.add_oneMin);
+        mAddFiveMinButton = (Button) findViewById(R.id.add_fiveMin);
+        mAddTenMinButton = (Button) findViewById(R.id.add_tenMin);
+        //modify by yeqing.lv for XR7685084 on 2019-5-8 end
         mCircleView = (TimerCircleView) findViewById(R.id.timer_time);
         mTimerText = (TextView) findViewById(R.id.timer_time_text);
         mTimerTextController = new TimerTextController(mTimerText);
@@ -91,10 +99,12 @@ public class TimerItem extends LinearLayout {
         mTimerTextController.setTimeString(timer.getRemainingTime());
 
         // Update the label if it changed.
-        final String label = timer.getLabel();
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 end
+        /*final String label = timer.getLabel();
         if (!TextUtils.equals(label, mLabelView.getText())) {
             mLabelView.setText(label);
-        }
+        }*/
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 end
 
         // Update visibility of things that may blink.
         final boolean blinkOff = SystemClock.elapsedRealtime() % 1000 < 500;
@@ -120,19 +130,20 @@ public class TimerItem extends LinearLayout {
             switch (mLastState) {
                 case RESET:
                 case PAUSED: {
-                    mResetAddButton.setText(R.string.timer_reset);
-                    mResetAddButton.setContentDescription(null);
+                    mAddOneMinButton.setClickable(false);
+                    mAddFiveMinButton.setClickable(false);
+                    mAddTenMinButton.setClickable(false);
                     mTimerText.setClickable(true);
                     mTimerText.setActivated(false);
                     mTimerText.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
                     ViewCompat.setAccessibilityDelegate(mTimerText, new ClickAccessibilityDelegate(
-                            context.getString(R.string.timer_start), true));
+                            context.getString(R.string.timer_pause)));
                     break;
                 }
                 case RUNNING: {
-                    final String addTimeDesc = context.getString(R.string.timer_plus_one);
-                    mResetAddButton.setText(R.string.timer_add_minute);
-                    mResetAddButton.setContentDescription(addTimeDesc);
+                    mAddOneMinButton.setClickable(true);
+                    mAddFiveMinButton.setClickable(true);
+                    mAddTenMinButton.setClickable(true);
                     mTimerText.setClickable(true);
                     mTimerText.setActivated(false);
                     mTimerText.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
@@ -142,9 +153,6 @@ public class TimerItem extends LinearLayout {
                 }
                 case EXPIRED:
                 case MISSED: {
-                    final String addTimeDesc = context.getString(R.string.timer_plus_one);
-                    mResetAddButton.setText(R.string.timer_add_minute);
-                    mResetAddButton.setContentDescription(addTimeDesc);
                     mTimerText.setClickable(false);
                     mTimerText.setActivated(true);
                     mTimerText.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);

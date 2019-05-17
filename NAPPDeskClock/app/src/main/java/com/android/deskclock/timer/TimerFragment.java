@@ -22,6 +22,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -250,38 +251,26 @@ public final class TimerFragment extends DeskClockFragment {
             fab.setVisibility(VISIBLE);
             switch (timer.getState()) {
                 case RUNNING:
-                    if (animate) {
-                        fab.setImageResource(R.drawable.ic_play_pause_animation);
-                    } else {
-                        fab.setImageResource(R.drawable.ic_play_pause);
-                    }
+                    fab.setImageResource(R.drawable.ic_timer_pause);
                     fab.setContentDescription(fab.getResources().getString(R.string.timer_stop));
                     break;
                 case RESET:
-                    if (animate) {
-                        fab.setImageResource(R.drawable.ic_stop_play_animation);
-                    } else {
-                        fab.setImageResource(R.drawable.ic_pause_play);
-                    }
+                    fab.setImageResource(R.drawable.ic_timer_start);
                     fab.setContentDescription(fab.getResources().getString(R.string.timer_start));
                     break;
                 case PAUSED:
-                    if (animate) {
-                        fab.setImageResource(R.drawable.ic_pause_play_animation);
-                    } else {
-                        fab.setImageResource(R.drawable.ic_pause_play);
-                    }
+                    fab.setImageResource(R.drawable.ic_timer_start);
                     fab.setContentDescription(fab.getResources().getString(R.string.timer_start));
                     break;
                 case MISSED:
                 case EXPIRED:
-                    fab.setImageResource(R.drawable.ic_stop_white_24dp);
+                    fab.setImageResource(R.drawable.ic_timer_stop);
                     fab.setContentDescription(fab.getResources().getString(R.string.timer_stop));
                     break;
             }
         } else if (mCurrentView == mCreateTimerView) {
             if (mCreateTimerView.hasValidInput()) {
-                fab.setImageResource(R.drawable.ic_start_white_24dp);
+                fab.setImageResource(R.drawable.ic_timer_start);
                 fab.setContentDescription(fab.getResources().getString(R.string.timer_start));
                 fab.setVisibility(VISIBLE);
             } else {

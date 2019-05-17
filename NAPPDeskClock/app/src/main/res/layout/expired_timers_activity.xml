@@ -37,15 +37,14 @@
 
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/timer_stop"
-        android:src="@drawable/ic_stop_white_24dp"
-        app:borderWidth="0dp"
-        app:elevation="@dimen/fab_elevation" />
+        android:src="@drawable/ic_timer_stop"
+        android:background="@drawable/ic_clock_fab_bg_normal"/>
 
 </FrameLayout>

@@ -19,9 +19,11 @@ package com.android.deskclock.timer;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.android.deskclock.LabelDialogFragment;
 import com.android.deskclock.R;
@@ -62,8 +64,11 @@ public class TimerItemFragment extends Fragment {
         }
 
         final TimerItem view = (TimerItem) inflater.inflate(R.layout.timer_item, container, false);
-        view.findViewById(R.id.reset_add).setOnClickListener(new ResetAddListener());
-        view.findViewById(R.id.timer_label).setOnClickListener(new EditLabelListener());
+        view.findViewById(R.id.add_oneMin).setOnClickListener(new ResetAddOneMinListener());
+        view.findViewById(R.id.add_fiveMin).setOnClickListener(new ResetAddFiveMinListener());
+        view.findViewById(R.id.add_tenMin).setOnClickListener(new ResetAddTenMinListener());
+        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8
+        //view.findViewById(R.id.timer_label).setOnClickListener(new EditLabelListener());
         view.findViewById(R.id.timer_time_text).setOnClickListener(new TimeTextListener());
         view.update(timer);
 
@@ -92,13 +97,14 @@ public class TimerItemFragment extends Fragment {
         return DataModel.getDataModel().getTimer(getTimerId());
     }
 
-    private final class ResetAddListener implements View.OnClickListener {
+    private final class ResetAddOneMinListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             final Timer timer = getTimer();
-            if (timer.isPaused()) {
+            /*if (timer.isPaused()) {
                 DataModel.getDataModel().resetOrDeleteTimer(timer, R.string.label_deskclock);
-            } else if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
+            } else*/
+            if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
                 DataModel.getDataModel().addTimerMinute(timer);
                 Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
 
@@ -113,6 +119,48 @@ public class TimerItemFragment extends Fragment {
             }
         }
     }
+
+    //add by yeqing.lv for XR7685084 on 2019-5-13 begin
+    private final class ResetAddFiveMinListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            final Timer timer = getTimer();
+            if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
+                DataModel.getDataModel().addTimerMinute(timer);
+                Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
+
+                final Context context = v.getContext();
+                // Must use getTimer() because old timer is no longer accurate.
+                final long currentTime = getTimer().getRemainingTime();
+                if (currentTime > 0) {
+                    v.announceForAccessibility(TimerStringFormatter.formatString(
+                            context, R.string.timer_accessibility_one_minute_added, currentTime,
+                            true));
+                }
+            }
+        }
+    }
+
+    private final class ResetAddTenMinListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            final Timer timer = getTimer();
+            if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
+                DataModel.getDataModel().addTimerMinute(timer);
+                Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
+
+                final Context context = v.getContext();
+                // Must use getTimer() because old timer is no longer accurate.
+                final long currentTime = getTimer().getRemainingTime();
+                if (currentTime > 0) {
+                    v.announceForAccessibility(TimerStringFormatter.formatString(
+                            context, R.string.timer_accessibility_one_minute_added, currentTime,
+                            true));
+                }
+            }
+        }
+    }
+    //add by yeqing.lv for XR7685084 on 2019-5-13 end
 
     private final class EditLabelListener implements View.OnClickListener {
         @Override

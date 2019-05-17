@@ -127,7 +127,10 @@ final class CityModel {
         if (mHomeCity == null) {
             final String name = mContext.getString(R.string.home_label);
             final TimeZone timeZone = mSettingsModel.getHomeTimeZone();
-            mHomeCity = new City(null, -1, null, name, name, timeZone);
+            //begin zhixiong.liu.hz for task7685084 20190508 here may get correct city and more info
+            mHomeCity = new City(null, -1, null, name, name, timeZone, 0, 0);
+            //mHomeCity = new City(null, -1, null, name, name, timeZone);
+            //end  zhixiong.liu.hz for task7685084 20190508
         }
 
         return mHomeCity;

@@ -15,6 +15,8 @@
 -->
 
 <!-- This TimerItem includes the circle because ample space exists. -->
+
+<!--modify yeqing.lv for XR7685084 on 2019-5-8-->
 <com.android.deskclock.timer.TimerItem
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,12 +26,46 @@
 
     <android.support.percent.PercentFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/fab_margin"
         android:layout_weight="1">
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="@dimen/add_min_button_margin_top">
 
+            <Button
+                android:id="@+id/add_oneMin"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@string/timer_add_one_minute"
+                android:layout_margin="15px"
+                android:layout_weight="1"
+                android:background="@drawable/ic_timer_add_button_bg"/>
+
+            <Button
+                android:id="@+id/add_fiveMin"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@string/timer_add_five_minutes"
+                android:layout_margin="15px"
+                android:layout_weight="1"
+                android:background="@drawable/ic_timer_add_button_bg"/>
+
+            <Button
+                android:id="@+id/add_tenMin"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@string/timer_add_ten_minutes"
+                android:layout_margin="15px"
+                android:layout_weight="1"
+                android:background="@drawable/ic_timer_add_button_bg"/>
+        </LinearLayout>
         <com.android.deskclock.TimerCircleFrameLayout
-            android:layout_gravity="center"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="@dimen/timer_circle_frame_margin_top"
             app:layout_aspectRatio="100%"
+            android:background="@drawable/timer_clockdial_bg"
             app:layout_heightPercent="@fraction/timer_circle_height_percent"
             app:layout_widthPercent="@fraction/timer_circle_width_percent">
 
@@ -39,8 +75,10 @@
 
                 <com.android.deskclock.timer.TimerCircleView
                     android:id="@+id/timer_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_width="257.5dp"
+                    android:layout_height="@dimen/timer_circle_view_layout"
+                    android:layout_marginLeft="@dimen/timer_circle_view_margin_left"
+                    android:layout_marginTop="@dimen/timer_circle_view_margin_top"/>
 
                 <com.android.deskclock.widget.AutoSizingTextView
                     android:id="@+id/timer_time_text"
@@ -54,34 +92,10 @@
                     android:paddingStart="20dp"
                     android:textSize="70sp" />
 
-                <Button
-                    android:id="@+id/timer_label"
-                    style="?attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|center_horizontal"
-                    android:clickable="false"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:hint="@string/label"
-                    android:maxLines="1"
-                    android:minHeight="@dimen/touch_target_min_size"
-                    android:minWidth="@dimen/touch_target_min_size"
-                    android:textAppearance="@style/SecondaryLabelTextAppearance" />
-
-                <Button
-                    android:id="@+id/reset_add"
-                    style="?attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:contentDescription="@string/timer_plus_one"
-                    android:gravity="center"
-                    android:scaleType="centerInside" />
-
             </com.android.deskclock.CircleButtonsLayout>
 
         </com.android.deskclock.TimerCircleFrameLayout>
+
 
     </android.support.percent.PercentFrameLayout>
 

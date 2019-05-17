@@ -101,14 +101,13 @@
 
         </FrameLayout>
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_margin="@dimen/fab_margin"
-            app:borderWidth="0dp"
-            app:elevation="@dimen/fab_elevation" />
+            android:background="@drawable/ic_clock_fab_bg_normal"/>
 
         <FrameLayout
             android:layout_width="0dp"

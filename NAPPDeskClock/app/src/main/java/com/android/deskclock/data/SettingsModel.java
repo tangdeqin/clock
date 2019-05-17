@@ -25,6 +25,7 @@ import com.android.deskclock.Utils;
 import com.android.deskclock.data.DataModel.AlarmVolumeButtonBehavior;
 import com.android.deskclock.data.DataModel.CitySort;
 import com.android.deskclock.data.DataModel.ClockStyle;
+import com.android.deskclock.settings.SettingsActivity;
 
 import java.util.TimeZone;
 
@@ -169,6 +170,14 @@ final class SettingsModel {
         SettingsDAO.setTimerVibrate(mPrefs, enabled);
     }
 
+
+    boolean getTurnOverToMute() {
+        return SettingsDAO.getTurnOverToMute(mPrefs);
+    }
+
+    void setTurnOverToMute(boolean enabled) {
+        SettingsDAO.setTurnOverToMute(mPrefs,enabled);
+    }
     TimeZones getTimeZones() {
         return SettingsDAO.getTimeZones(mContext, mTimeModel.currentTimeMillis());
     }

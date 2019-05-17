@@ -61,8 +61,8 @@ public final class TimerTextController {
                 }
             }
         }
-
-        String time = Utils.getTimeString(mTextView.getContext(), hours, minutes, seconds);
+        //modify getTimeStringForTimer yeqing.lv for XR7685084 on 2019-5-8
+        String time = Utils.getTimeStringForTimer(mTextView.getContext(), hours, minutes, seconds);
         if (isNegative && !(hours == 0 && minutes == 0 && seconds == 0)) {
             time = "\u2212" + time;
         }

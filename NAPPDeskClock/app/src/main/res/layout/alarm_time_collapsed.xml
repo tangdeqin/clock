@@ -76,6 +76,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="none"
             android:focusable="true"
+            android:maxLines="1"
             android:paddingEnd="@dimen/icon_margin"
             android:paddingStart="@dimen/icon_margin" />
 

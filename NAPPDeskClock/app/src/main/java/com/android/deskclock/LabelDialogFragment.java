@@ -24,15 +24,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +39,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -63,7 +63,7 @@ public class LabelDialogFragment extends DialogFragment implements View.OnClickL
     private static final String ARG_TIMER_ID = "arg_timer_id";
     private static final String ARG_TAG = "arg_tag";
 
-    private AppCompatEditText mLabelEditText;
+    private EditText mLabelEditText;
     private Alarm mAlarm;
     private int mTimerId;
     private String mTag;
@@ -150,6 +150,14 @@ public class LabelDialogFragment extends DialogFragment implements View.OnClickL
     public void onStart(){
         super.onStart();
         setEditLabelSize();
+        Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                showSoftInputFromWindow(mLabelEditText);
+            }
+        };
+        handler.postDelayed(r, 100);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -187,7 +195,7 @@ public class LabelDialogFragment extends DialogFragment implements View.OnClickL
             case R.id.label_edit_ok:
                 setLabel();
                 dismiss();
-            break;
+                break;
             default:break;
         }
     }
@@ -265,4 +273,12 @@ public class LabelDialogFragment extends DialogFragment implements View.OnClickL
         }
     }
 
+    public void showSoftInputFromWindow(EditText editText){
+        editText.setFocusable(true);
+        editText.setFocusableInTouchMode(true);
+        editText.requestFocus();
+        InputMethodManager inputManager =
+                (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(editText, 0);
+    }
 }

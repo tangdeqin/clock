@@ -8,7 +8,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import com.android.deskclock.R;
-import com.android.deskclock.alarms.VerticalTextPicker.OnChangedListener;
+import com.android.deskclock.VerticalTextPicker;
+import com.android.deskclock.VerticalTextPicker.OnChangedListener;
 
 public class MyTimePicker extends FrameLayout {
 
