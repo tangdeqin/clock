@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>ic/timer_play</title>
+    <desc>Created with Sketch.</desc>
+    <g id="ic/timer_play" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <rect id="矩形" fill-opacity="0" fill="#42C781" x="0" y="0" width="24" height="24"></rect>
+            <path d="M13.4682431,6.5194255 L19.7450635,17.5038611 C20.0190734,17.9833785 19.8524767,18.5942332 19.3729593,18.8682431 C19.2218616,18.9545847 19.0508473,19 18.8768203,19 L6.32317968,19 C5.77089493,19 5.32317968,18.5522847 5.32317968,18 C5.32317968,17.8259731 5.368595,17.6549588 5.45493654,17.5038611 L11.7317569,6.5194255 C12.0057668,6.03990805 12.6166215,5.87331133 13.0961389,6.14732129 C13.2511702,6.2359106 13.3796538,6.36439422 13.4682431,6.5194255 Z" id="三角形" fill="#2A2C45" transform="translate(12.600000, 12.000000) rotate(-270.000000) translate(-12.600000, -12.000000) "></path>
+        </g>
+    </g>
+</svg>

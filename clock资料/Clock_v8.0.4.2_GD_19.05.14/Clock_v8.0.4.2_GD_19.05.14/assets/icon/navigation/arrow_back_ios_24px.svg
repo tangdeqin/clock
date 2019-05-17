@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>icon/navigation/arrow_back_ios_24px</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="17.51 3.87 15.73 2.1 5.84 12 15.74 21.9 17.51 20.13 9.38 12"></polygon>
+    </defs>
+    <g id="icon/navigation/arrow_back_ios_24px" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="icon/navigation/arrow_back_24px" fill="#FFFFFF" fill-rule="nonzero" xlink:href="#path-1"></use>
+    </g>
+</svg>
