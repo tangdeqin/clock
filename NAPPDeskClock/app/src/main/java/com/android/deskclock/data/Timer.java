@@ -370,7 +370,27 @@ public final class Timer {
         // Otherwise try to add a minute to the remaining time.
         return setRemainingTime(mRemainingTime + MINUTE_IN_MILLIS);
     }
+    //add by yeqing.lv for P10043669 on 2019-5-22 begin
+    Timer addFiveMinutes() {
+        // Expired and missed timers restart with 60*5 seconds of remaining time.
+        if (mState == EXPIRED || mState == MISSED) {
+            return setRemainingTime(5 * MINUTE_IN_MILLIS);
+        }
 
+        // Otherwise try to add 5 minutes to the remaining time.
+        return setRemainingTime(mRemainingTime + 5 * MINUTE_IN_MILLIS);
+    }
+
+    Timer addTenMinutes() {
+        // Expired and missed timers restart with 60*10 seconds of remaining time.
+        if (mState == EXPIRED || mState == MISSED) {
+            return setRemainingTime(10 * MINUTE_IN_MILLIS);
+        }
+
+        // Otherwise try to add 10 minutes to the remaining time.
+        return setRemainingTime(mRemainingTime + 10 * MINUTE_IN_MILLIS);
+    }
+    //add by yeqing.lv for P10043669 on 2019-5-22 end
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

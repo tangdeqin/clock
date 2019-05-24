@@ -53,6 +53,7 @@
         <item name="actionBarStyle">@style/Widget.ActionBar</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
+        <item name="colorAccent">#4DFFFFFF</item>
     </style>
 
     <style name="Theme.DeskClock.CitySelection">
@@ -60,6 +61,7 @@
         <item name="actionBarStyle">@style/Widget.ActionBar.NoTitle</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
+        <item name="colorAccent">#4DFFFFFF</item>
     </style>
 
     <style name="ThemeOverlay.Control.Accent" parent="ThemeOverlay.AppCompat">

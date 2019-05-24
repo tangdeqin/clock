@@ -129,7 +129,7 @@ public final class ClockFragment extends DeskClockFragment {
 
         final Context context = container.getContext();
         mCityList.setOnTouchListener(new CityListOnLongClickListener(context));
-        fragmentView.setOnLongClickListener(new StartScreenSaverListener());
+        //fragmentView.setOnLongClickListener(new StartScreenSaverListener());
 
         // On tablet landscape, the clock frame will be a distinct view. Otherwise, it'll be added
         // on as a header to the main listview.
@@ -318,7 +318,7 @@ public final class ClockFragment extends DeskClockFragment {
     /**
      * Long pressing over the main clock starts the screen saver.
      */
-    private final class StartScreenSaverListener implements View.OnLongClickListener {
+/*    private final class StartScreenSaverListener implements View.OnLongClickListener {
 
         @Override
         public boolean onLongClick(View view) {
@@ -327,7 +327,7 @@ public final class ClockFragment extends DeskClockFragment {
                     .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_deskclock));
             return true;
         }
-    }
+    }*/
 
     /**
      * Long pressing over the city list starts the screen saver.

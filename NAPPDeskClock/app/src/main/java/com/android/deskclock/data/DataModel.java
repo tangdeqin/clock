@@ -578,6 +578,22 @@ public final class DataModel {
         enforceMainLooper();
         mTimerModel.updateTimer(timer.addMinute());
     }
+    //add by yeqing.lv for P10043669 on 2019-5-22 begin
+    /**
+     * @param timer the timer to which 5 minutes should be added to the remaining time
+     */
+    public void addTimerFiveMinutes(Timer timer) {
+        enforceMainLooper();
+        mTimerModel.updateTimer(timer.addFiveMinutes());
+    }
+    /**
+     * @param timer the timer to which 10 minutes should be added to the remaining time
+     */
+    public void addTimerTenMinutes(Timer timer) {
+        enforceMainLooper();
+        mTimerModel.updateTimer(timer.addTenMinutes());
+    }
+    //add by yeqing.lv for P10043669 on 2019-5-22 end
 
     /**
      * @param timer the timer to which the new {@code label} belongs

@@ -2,14 +2,12 @@ package com.android.deskclock.alarms;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +39,10 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
     private static final String TAG = "TimePickerActivity";
     private static final String ARG_HOUR = TAG + "_hour";
     private static final String ARG_MINUTE = TAG + "_minute";
+
+    //add by deqin.tang for defect P10043615 on 2019-5-23 begin
+    public static Boolean setRingtoneUriFlag = false;
+    //add by deqin.tang for defect P10043615 on 2019-5-23 end
 
     private static Alarm alarm;
     private AlarmStateOfStart mAlarmStateOfStart = new AlarmStateOfStart();
@@ -180,7 +182,22 @@ public class TimePickerActivity extends BaseActivity implements View.OnClickList
         outState.putInt(ARG_MINUTE,timePicker.getCurrentMinute());
     }
 
-    public static Intent createTimePickActivityIntent(Context context,Alarm alarm) {
+    //add by deqin.tang for defect P10043615 on 2019-5-23 begin
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setRingtoneUriFlag = true;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setRingtoneUriFlag = false;
+    }
+    //add by deqin.tang for defect P10043615 on 2019-5-23 end
+
+    public static Intent createTimePickActivityIntent(Context context, Alarm alarm) {
         return new Intent(context, TimePickerActivity.class).putExtra(TAG,alarm);
     }
 

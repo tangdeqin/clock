@@ -7,14 +7,14 @@
     android:orientation="vertical" >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/alarmedit_top_padding"
-        android:background="@color/default_background">
-    </RelativeLayout>
-
+        android:layout_height="0dp"
+        android:background="@color/default_background"
+        android:layout_weight="1"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/alarmedit_title_hight"
-        android:background="@color/default_background">
+        android:layout_height="0dp"
+        android:background="@color/default_background"
+        android:layout_weight="2">
         <ImageView
             android:id="@+id/backimagview"
             android:layout_width="@dimen/alarmedit_titleimage_size"
@@ -44,9 +44,11 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_check_24px" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
         <com.android.deskclock.alarms.MyTimePicker
             android:id="@+id/timerpicker"
             android:layout_width="wrap_content"
@@ -54,6 +56,11 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="19">
     <android.support.v7.widget.GridLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -252,5 +259,10 @@
             app:layout_gravity="fill_horizontal"
             app:layout_row="9" />
     </android.support.v7.widget.GridLayout>
-
+   </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/default_background"
+        android:layout_weight="2"/>
 </LinearLayout>

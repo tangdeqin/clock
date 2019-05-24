@@ -42,11 +42,11 @@ final class AddCustomRingtoneViewHolder extends ItemViewHolder<AddCustomRingtone
 
         final TextView nameView = (TextView) itemView.findViewById(R.id.ringtone_name);
         nameView.setText(itemView.getContext().getString(R.string.add_new_sound));
-        nameView.setAlpha(0.63f);
+        //nameView.setAlpha(0.63f);
 
-        final ImageView imageView = (ImageView) itemView.findViewById(R.id.ringtone_image);
+       final ImageView imageView = (ImageView) itemView.findViewById(R.id.ringtone_image);
         imageView.setImageResource(R.drawable.ic_add_white_24dp);
-        imageView.setAlpha(0.63f);
+       // imageView.setAlpha(0.63f);
     }
 
     @Override

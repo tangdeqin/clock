@@ -240,7 +240,8 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Fetch the widget size selected by the user.
-        final Resources resources = context.getResources();
+        //begin remove by zhixiong.liu.hz for PP10043489 20190520, qualcomm mesure the view size wrong ,not know why,so remove about logic
+        /*final Resources resources = context.getResources();
         final float density = resources.getDisplayMetrics().density;
         final int minWidthPx = (int) (density * options.getInt(OPTION_APPWIDGET_MIN_WIDTH));
         final int minHeightPx = (int) (density * options.getInt(OPTION_APPWIDGET_MIN_HEIGHT));
@@ -250,9 +251,8 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final int targetHeightPx = portrait ? maxHeightPx : minHeightPx;
         final int largestClockFontSizePx =
                 resources.getDimensionPixelSize(R.dimen.widget_max_clock_font_size);
-
         // Create a size template that describes the widget bounds.
-        final Sizes template = new Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx/2);
+        final Sizes template = new Sizes(targetWidthPx/2, targetHeightPx, largestClockFontSizePx/2);
 
         // Compute optimal font sizes and icon sizes to fit within the widget bounds.
         //final Sizes sizes = optimizeSizes(context, template, nextAlarmTime);
@@ -272,7 +272,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         rv.setTextViewTextSize(R.id.clock_sub, COMPLEX_UNIT_PX, sizes.mClockFontSizePx);
         
 
-        /*final int smallestWorldCityListSizePx =
+        final int smallestWorldCityListSizePx =
                 resources.getDimensionPixelSize(R.dimen.widget_min_world_city_list_size);
         if (sizes.getListHeight() <= smallestWorldCityListSizePx) {
             // Insufficient space; hide the world city list.
@@ -292,7 +292,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
                 rv.setPendingIntentTemplate(R.id.world_city_list, pi);
             }
         }*/
-
+        //end remove by zhixiong.liu.hz for PP10043489 20190520
         return rv;
     }
 

@@ -89,6 +89,7 @@ public class AlarmActivity extends BaseActivity
     private static final int ALERT_REVEAL_DURATION_MILLIS = 500;
     private static final int ALERT_FADE_DURATION_MILLIS = 500;
     private static final int ALERT_DISMISS_DELAY_MILLIS = 2000;
+    private static final int ARROW_DURATION_MILLIS = 500;
 
     private static final float BUTTON_SCALE_DEFAULT = 0.7f;
     private static final int BUTTON_DRAWABLE_ALPHA_DEFAULT = 165;
@@ -151,6 +152,7 @@ public class AlarmActivity extends BaseActivity
     private ImageView mAlarmButton;
     private ImageView mSnoozeButton;
     private ImageView mDismissButton;
+    private ImageView arrowOne,arrowTwo,arrowThree,arrowFour;
     private TextView mHintView;
 
     private ValueAnimator mAlarmAnimator;
@@ -217,6 +219,10 @@ public class AlarmActivity extends BaseActivity
         final TextView titleView = (TextView) mContentView.findViewById(R.id.title);
         final TextClock digitalClock = (TextClock) mContentView.findViewById(R.id.digital_clock);
         final CircleView pulseView = (CircleView) mContentView.findViewById(R.id.pulse);
+        arrowOne = (ImageView) mContentView.findViewById(R.id.arrow_one);
+        arrowTwo = (ImageView) mContentView.findViewById(R.id.arrow_two);
+        arrowThree = (ImageView) mContentView.findViewById(R.id.arrow_three);
+        arrowFour = (ImageView) mContentView.findViewById(R.id.arrow_four);
 
         titleView.setText(mAlarmInstance.getLabelOrDefault(this));
         Utils.setTimeFormat(digitalClock, false);
@@ -239,8 +245,26 @@ public class AlarmActivity extends BaseActivity
         mPulseAnimator.setInterpolator(PULSE_INTERPOLATOR);
         mPulseAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mPulseAnimator.start();
+        setArrowAlphaChange();
     }
 
+    private void setArrowAlphaChange(){
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(arrowOne,"alpha",0.2f,1.0f,0.2f);
+        animator1.setRepeatCount(ValueAnimator.INFINITE);
+
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(arrowTwo,"alpha",1.0f,0.2f,1.0f);
+        animator2.setRepeatCount(ValueAnimator.INFINITE);
+
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(arrowThree,"alpha",0.2f,1.0f,0.2f);
+        animator3.setRepeatCount(ValueAnimator.INFINITE);
+
+        ObjectAnimator animator4 = ObjectAnimator.ofFloat(arrowFour,"alpha",1.0f,0.2f,1.0f);
+        animator4.setRepeatCount(ValueAnimator.INFINITE);
+
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(ARROW_DURATION_MILLIS).play(animator1).with(animator2).with(animator3).with(animator4);
+        set.start();
+    }
     @Override
     protected void onResume() {
         super.onResume();

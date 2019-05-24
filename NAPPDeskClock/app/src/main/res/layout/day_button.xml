@@ -19,7 +19,7 @@
              android:layout_width="0dp"
              android:layout_height="48dp"
              android:layout_weight="1">
-    <CheckBox
+    <com.android.deskclock.alarms.CheckboxSelf
         android:id="@+id/day_button_box"
         android:layout_width="40dp"
         android:layout_height="40dp"

@@ -37,6 +37,7 @@ import com.android.deskclock.Utils;
 import com.android.deskclock.events.Events;
 import com.android.deskclock.NotificationChannelManager.Channel;
 import com.android.deskclock.NotificationChannelManager;
+import com.android.deskclock.DeskClock;
 
 import com.android.deskclock.timer.ExpiredTimersActivity;
 import com.android.deskclock.timer.TimerService;
@@ -263,7 +264,6 @@ class TimerNotificationBuilder {
         // Content intent shows the timer full screen when clicked.
         final Intent content = new Intent(context, ExpiredTimersActivity.class);
         final PendingIntent contentIntent = Utils.pendingActivityIntent(context, content);
-
         // Full screen intent has flags so it is different than the content intent.
         final Intent fullScreen = new Intent(context, ExpiredTimersActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);

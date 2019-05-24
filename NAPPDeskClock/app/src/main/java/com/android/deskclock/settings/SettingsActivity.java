@@ -18,6 +18,8 @@ package com.android.deskclock.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -64,7 +66,6 @@ public final class SettingsActivity extends BaseActivity {
     public static final String KEY_DATE_TIME = "date_time";
     public static final String KEY_VOLUME_BUTTONS = "volume_button_setting";
     public static final String KEY_WEEK_START = "week_start";
-    public static final String KEY_ALARM_VOLUME = "volume_setting";//add by yeqing.lv for task5238340
     public static final String KEY_TURN_OVER_TO_MUTE = "turn_over_to_mute";
 
     public static final String DEFAULT_VOLUME_BEHAVIOR = "0";
@@ -75,6 +76,7 @@ public final class SettingsActivity extends BaseActivity {
     public static final String PREFERENCE_DIALOG_FRAGMENT_TAG = "preference_dialog";
 
     private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
+    private  static SensorManager sensorManager ;
 
     /**
      * The controller that shows the drop shadow when content is not scrolled to the top.
@@ -85,6 +87,7 @@ public final class SettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        sensorManager  = (SensorManager) getSystemService(SENSOR_SERVICE);
         mOptionsMenuManager.addMenuItemController(new NavUpMenuItemController(this))
                 .addMenuItemController(MenuItemControllerFactory.getInstance()
                         .buildMenuItemControllers(this));
@@ -113,6 +116,12 @@ public final class SettingsActivity extends BaseActivity {
     protected void onPause() {
         mDropShadowController.stop();
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sensorManager = null;
     }
 
     @Override
@@ -154,6 +163,11 @@ public final class SettingsActivity extends BaseActivity {
             final boolean hasVibrator = ((Vibrator) timerVibrate.getContext()
                     .getSystemService(VIBRATOR_SERVICE)).hasVibrator();
             timerVibrate.setVisible(hasVibrator);
+            final Preference turnOverToMute = findPreference(KEY_TURN_OVER_TO_MUTE);
+            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (sensor==null){
+                ((PreferenceCategory)findPreference("alarm_settings")).removePreference(turnOverToMute);
+            }
             loadTimeZoneList();
         }
 
@@ -191,13 +205,14 @@ public final class SettingsActivity extends BaseActivity {
                     weekStartPref.setSummary(weekStartPref.getEntries()[weekStartIndex]);
                     break;
                 case KEY_VOLUME_BUTTONS:
+                    //modify by yeqing.lv for 7685084 at 2019-5-20 begin
                     /*final SimpleMenuPreference simpleMenuPreference = (SimpleMenuPreference) pref;
                     final int i = simpleMenuPreference.findIndexOfValue((String) newValue);
                     pref.setSummary(simpleMenuPreference.getEntries()[i]);*/
                     final ListPreference volumeButtonsPref = (ListPreference) pref;
                     final int volumeButtonsIndex = volumeButtonsPref.findIndexOfValue((String) newValue);
                     volumeButtonsPref.setSummary(volumeButtonsPref.getEntries()[volumeButtonsIndex]);
-                    //modify by yeqing.lv for XR7685084 at 2019-5-7
+                    //modify by yeqing.lv for 7685084 at 2019-5-20 end
                     break;
                 case KEY_CLOCK_DISPLAY_SECONDS:
                     DataModel.getDataModel().setDisplayClockSeconds((boolean) newValue);
@@ -244,15 +259,6 @@ public final class SettingsActivity extends BaseActivity {
                 case KEY_TIMER_RINGTONE:
                     startActivity(RingtonePickerActivity.createTimerRingtonePickerIntent(context));
                     return true;
-
-                //add by yeqing.lv for XR7685084 on 2019-5-7 begin
-                case KEY_ALARM_VOLUME:
-                    final AudioManager audioManager =
-                            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    audioManager.adjustStreamVolume(AudioManager.STREAM_ALARM,
-                            AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
-                    return true;
-                //add by yeqing.lv for XR7685084 on 2019-5-7 end
             }
 
             return false;
@@ -340,10 +346,6 @@ public final class SettingsActivity extends BaseActivity {
             final Preference timerRingtonePref = findPreference(KEY_TIMER_RINGTONE);
             timerRingtonePref.setOnPreferenceClickListener(this);
             timerRingtonePref.setSummary(DataModel.getDataModel().getTimerRingtoneTitle());
-            //add by yeqing.lv for XR7685084 on 2019-5-7 begin
-            final Preference volumePref = findPreference(KEY_ALARM_VOLUME);
-            volumePref.setOnPreferenceClickListener(this);
-            //add by yeqing.lv for XR7685084 on 2019-5-7 end
         }
 
         private void refreshListPreference(ListPreference preference) {

@@ -16,21 +16,21 @@
 
 package com.android.deskclock.ringtone;
 
-import android.graphics.PorterDuff;
-import android.support.v4.content.ContextCompat;
+//import android.graphics.PorterDuff;
+//import android.support.v4.content.ContextCompat;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.deskclock.AnimatorUtils;
+//import com.android.deskclock.AnimatorUtils;
 import com.android.deskclock.ItemAdapter;
 import com.android.deskclock.R;
-import com.android.deskclock.ThemeUtils;
-import com.android.deskclock.Utils;
+//import com.android.deskclock.ThemeUtils;
+//import com.android.deskclock.Utils;
 
 import static android.view.View.GONE;
 import static android.view.View.OnClickListener;
@@ -48,7 +48,7 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
 
     private final View mSelectedView;
     private final TextView mNameView;
-    private final ImageView mImageView;
+    /*private final ImageView mImageView;*/
 
     private RingtoneViewHolder(View itemView) {
         super(itemView);
@@ -56,19 +56,21 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
 
         mSelectedView = itemView.findViewById(R.id.sound_image_selected);
         mNameView = (TextView) itemView.findViewById(R.id.ringtone_name);
+/*
         mImageView = (ImageView) itemView.findViewById(R.id.ringtone_image);
+*/
     }
 
     @Override
     protected void onBindItemView(RingtoneHolder itemHolder) {
         mNameView.setText(itemHolder.getName());
-        final boolean opaque = itemHolder.isSelected() || !itemHolder.hasPermissions();
-        mNameView.setAlpha(opaque ? 1f : .63f);
-        mImageView.setAlpha(opaque ? 1f : .63f);
-        mImageView.clearColorFilter();
+        //final boolean opaque = itemHolder.isSelected() || !itemHolder.hasPermissions();
+        //mNameView.setAlpha(opaque ? 1f : .63f);
+      /*  mImageView.setAlpha(opaque ? 1f : .63f);
+        mImageView.clearColorFilter();*/
 
         final int itemViewType = getItemViewType();
-        if (itemViewType == VIEW_TYPE_CUSTOM_SOUND) {
+        /*if (itemViewType == VIEW_TYPE_CUSTOM_SOUND) {
             if (!itemHolder.hasPermissions()) {
                 mImageView.setImageResource(R.drawable.ic_ringtone_not_found);
                 final int colorAccent = ThemeUtils.resolveColor(itemView.getContext(),
@@ -84,13 +86,13 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
         } else {
             mImageView.setImageResource(R.drawable.ic_ringtone);
         }
-        AnimatorUtils.startDrawableAnimation(mImageView);
+        AnimatorUtils.startDrawableAnimation(mImageView);*/
 
         mSelectedView.setVisibility(itemHolder.isSelected() ? VISIBLE : GONE);
 
-        final int bgColorId = itemHolder.isSelected() ? R.color.white_08p : R.color.transparent;
+    /*    final int bgColorId = itemHolder.isSelected() ? R.color.white_08p : R.color.transparent;
         itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), bgColorId));
-
+*/
         if (itemViewType == VIEW_TYPE_CUSTOM_SOUND) {
             itemView.setOnCreateContextMenuListener(this);
         }

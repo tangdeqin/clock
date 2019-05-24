@@ -297,13 +297,15 @@ public final class TimerFragment extends DeskClockFragment {
     public void onUpdateFabButtons(@NonNull Button left, @NonNull Button right) {
         if (mCurrentView == mTimersView) {
             left.setClickable(true);
-            left.setText(R.string.timer_delete);
+            left.setText("");
             left.setContentDescription(left.getResources().getString(R.string.timer_delete));
+            left.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_stopwatch_reset,0);  // luotao
             left.setVisibility(VISIBLE);
 
             right.setClickable(true);
             right.setText(R.string.timer_add_timer);
             right.setContentDescription(right.getResources().getString(R.string.timer_add_timer));
+            right.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);  // luotao
             right.setVisibility(INVISIBLE);
 
         } else if (mCurrentView == mCreateTimerView) {

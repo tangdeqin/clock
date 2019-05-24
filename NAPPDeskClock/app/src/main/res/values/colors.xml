@@ -28,7 +28,7 @@
 
     <color name="transparent">#00000000</color>
 
-    <color name="hairline">#28FFFFFF</color>
+    <color name="hairline">#28535252</color>
 
     <color name="clock_gray">#B3FFFFFF</color>
 
@@ -46,4 +46,8 @@
     <color name="white_labeltitle">#DE000000</color>
     <color name="white_labeltext">#FF268BE1</color>
     <color name="alarm_timepick_line">#FF2C7EBD</color>
+
+    <!--color for tablayout-->
+    <color name="tablayout_text_color">#FF2C7EBD</color>
+
 </resources>

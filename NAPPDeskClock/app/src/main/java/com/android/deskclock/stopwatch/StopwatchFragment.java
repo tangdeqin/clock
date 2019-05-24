@@ -276,7 +276,11 @@ public final class StopwatchFragment extends DeskClockFragment {
         if(isAdded()) {
             final Resources resources = getResources();
             left.setClickable(true);
-            left.setText(R.string.sw_reset_button);
+            // luotao
+            // old : left.setText(R.string.sw_reset_button);
+            left.setText("");
+            left.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_stopwatch_reset,0);
+            // end
             left.setContentDescription(resources.getString(R.string.sw_reset_button));
 
             switch (getStopwatch().getState()) {
@@ -288,7 +292,11 @@ public final class StopwatchFragment extends DeskClockFragment {
                 case RUNNING:
                     left.setVisibility(VISIBLE);
                     final boolean canRecordLaps = canRecordMoreLaps();
-                    right.setText(R.string.sw_lap_button);
+                    // luotao
+                    // old : right.setText(R.string.sw_lap_button);
+                    right.setText("");
+                    right.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stopwatch_lap,0,0,0);
+                    // end
                     right.setContentDescription(resources.getString(R.string.sw_lap_button));
                     right.setClickable(canRecordLaps);
                     right.setVisibility(canRecordLaps ? VISIBLE : INVISIBLE);
@@ -297,7 +305,11 @@ public final class StopwatchFragment extends DeskClockFragment {
                     left.setVisibility(VISIBLE);
                     right.setClickable(true);
                     right.setVisibility(VISIBLE);
-                    right.setText(R.string.sw_share_button);
+                    // luotao
+                    // old : right.setText(R.string.sw_share_button);
+                    right.setText("");
+                    right.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stopwatch_share,0,0,0);
+                    // end
                     right.setContentDescription(resources.getString(R.string.sw_share_button));
                     break;
             }

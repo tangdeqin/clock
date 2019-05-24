@@ -22,6 +22,7 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -41,10 +42,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.deskclock.actionbarmenu.MenuItemControllerFactory;
-import com.android.deskclock.actionbarmenu.NightModeMenuItemController;
 import com.android.deskclock.actionbarmenu.OptionsMenuManager;
 import com.android.deskclock.actionbarmenu.SettingsMenuItemController;
-import com.android.deskclock.alarms.TimePickerActivity;
 import com.android.deskclock.data.DataModel;
 import com.android.deskclock.data.DataModel.SilentSetting;
 import com.android.deskclock.data.OnSilentSettingsListener;
@@ -66,6 +65,8 @@ import static com.android.deskclock.AnimatorUtils.getScaleAnimator;
  */
 public class DeskClock extends BaseActivity
         implements FabContainer, LabelDialogFragment.AlarmLabelDialogHandler {
+
+    public static final String ACTION_GOTO_TIMER_FRAGMENT = "ACTION_GOTO_TIMER_FRAGMENT";//add by yeqing.lv for 7685084 on 2019-5-22
 
     /** Models the interesting state of display the {@link #mFab} button may inhabit. */
     private enum FabState { SHOWING, HIDE_ARMED, HIDING }
@@ -294,17 +295,27 @@ public class DeskClock extends BaseActivity
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 UiDataModel.getUiDataModel().setSelectedTab((UiDataModel.Tab) tab.getTag());
+                TextView text = (TextView) tab.getCustomView()
+                        .findViewById(android.R.id.text1);
+                text.setTextColor(getResources().getColor(R.color.tablayout_text_color));
+
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                TextView text = (TextView) tab.getCustomView()
+                        .findViewById(android.R.id.text1);
+                text.setTextColor(mTabLayout.getTabTextColors());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
+        TabLayout.Tab tab = mTabLayout.getTabAt(0);
+        TextView text = (TextView) tab.getCustomView()
+                .findViewById(android.R.id.text1);
+        text.setTextColor(getResources().getColor(R.color.tablayout_text_color));
         // Honor changes to the selected tab from outside entities.
         UiDataModel.getUiDataModel().addTabListener(mTabChangeWatcher);
     }
@@ -322,12 +333,9 @@ public class DeskClock extends BaseActivity
 
         final View dropShadow = findViewById(R.id.drop_shadow);
         mDropShadowController = new DropShadowController(dropShadow, UiDataModel.getUiDataModel(),
-                mSnackbarAnchor.findViewById(R.id.tab_hairline));
-
-        // ViewPager does not save state; this honors the selected tab in the user interface.
+            mSnackbarAnchor.findViewById(R.id.tab_hairline));
         updateCurrentTab();
     }
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -460,7 +468,10 @@ public class DeskClock extends BaseActivity
         // Recreate the activity if any settings have been changed
         if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS
                 && resultCode == RESULT_OK) {
-            mRecreateActivity = true;
+            //modify by deqin.tang for defect P10043665 on 2019-5-25 begin
+            mRecreateActivity = false;
+            mFragmentTabPager.setAdapter(mFragmentTabPagerAdapter);
+            //modify by deqin.tang for defect P10043665 on 2019-5-25 end
         }
     }
 

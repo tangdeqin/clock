@@ -130,9 +130,9 @@ public class TimerItem extends LinearLayout {
             switch (mLastState) {
                 case RESET:
                 case PAUSED: {
-                    mAddOneMinButton.setClickable(false);
-                    mAddFiveMinButton.setClickable(false);
-                    mAddTenMinButton.setClickable(false);
+                    mAddOneMinButton.setClickable(true);
+                    mAddFiveMinButton.setClickable(true);
+                    mAddTenMinButton.setClickable(true);
                     mTimerText.setClickable(true);
                     mTimerText.setActivated(false);
                     mTimerText.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);

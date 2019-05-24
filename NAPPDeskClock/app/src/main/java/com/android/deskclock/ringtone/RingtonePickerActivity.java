@@ -64,6 +64,7 @@ import static android.provider.OpenableColumns.DISPLAY_NAME;
 import static com.android.deskclock.ItemAdapter.ItemViewHolder.Factory;
 import static com.android.deskclock.ringtone.AddCustomRingtoneViewHolder.VIEW_TYPE_ADD_NEW;
 import static com.android.deskclock.ringtone.HeaderViewHolder.VIEW_TYPE_ITEM_HEADER;
+import static com.android.deskclock.ringtone.HeaderLineViewHolder.VIEW_TYPE_ITEM_HEADER_LINE;
 import static com.android.deskclock.ringtone.RingtoneViewHolder.VIEW_TYPE_CUSTOM_SOUND;
 import static com.android.deskclock.ringtone.RingtoneViewHolder.VIEW_TYPE_SYSTEM_SOUND;
 
@@ -189,9 +190,11 @@ public class RingtonePickerActivity extends BaseActivity
         final OnItemClickedListener listener = new ItemClickWatcher();
         final Factory ringtoneFactory = new RingtoneViewHolder.Factory(inflater);
         final Factory headerFactory = new HeaderViewHolder.Factory(inflater);
+        final Factory headerlineFactory = new HeaderLineViewHolder.Factory(inflater);
         final Factory addNewFactory = new AddCustomRingtoneViewHolder.Factory(inflater);
         mRingtoneAdapter = new ItemAdapter<>();
         mRingtoneAdapter.withViewTypes(headerFactory, null, VIEW_TYPE_ITEM_HEADER)
+                .withViewTypes(headerlineFactory,null,VIEW_TYPE_ITEM_HEADER_LINE)
                 .withViewTypes(addNewFactory, listener, VIEW_TYPE_ADD_NEW)
                 .withViewTypes(ringtoneFactory, listener, VIEW_TYPE_SYSTEM_SOUND)
                 .withViewTypes(ringtoneFactory, listener, VIEW_TYPE_CUSTOM_SOUND);
@@ -398,7 +401,7 @@ public class RingtonePickerActivity extends BaseActivity
      *
      * @param ringtone the ringtone to be played
      */
-    private void startPlayingRingtone(RingtoneHolder ringtone) {
+    private void startPlayingRingtone(RingtoneHolder ringtone)  {
         if (!ringtone.isPlaying() && !ringtone.isSilent()) {
             RingtonePreviewKlaxon.start(getApplicationContext(), ringtone.getUri());
             ringtone.setPlaying(true);
@@ -409,7 +412,12 @@ public class RingtonePickerActivity extends BaseActivity
             mSelectedRingtoneUri = ringtone.getUri();
         }
         ringtone.notifyItemChanged();
-        TimePickerActivity.setRingtonelUri(mSelectedRingtoneUri);
+
+        //modify by deqin.tang for defect P10043615 on 2019-5-23 begin
+        if(TimePickerActivity.setRingtoneUriFlag == true){
+            TimePickerActivity.setRingtonelUri(mSelectedRingtoneUri);
+        }
+        //modify by deqin.tang for defect P10043615 on 2019-5-23 end
     }
 
     /**
@@ -441,6 +449,11 @@ public class RingtonePickerActivity extends BaseActivity
      */
     private void removeCustomRingtone(Uri toRemove) {
         new RemoveCustomRingtoneTask(toRemove).execute();
+        //add by deqin.tang for defect P10043615 on 2019-5-23 begin
+        if(TimePickerActivity.setRingtoneUriFlag == true && toRemove.equals(mSelectedRingtoneUri)){
+            TimePickerActivity.setRingtonelUri(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        }
+        //add by deqin.tang for defect P10043615 on 2019-5-23 end
     }
 
     /**
@@ -689,4 +702,5 @@ public class RingtonePickerActivity extends BaseActivity
             mRingtoneAdapter.removeItem(toRemove);
         }
     }
+
 }

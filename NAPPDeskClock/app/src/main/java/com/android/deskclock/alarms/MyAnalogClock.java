@@ -81,7 +81,7 @@ public class MyAnalogClock extends View{
         int minute = cal.get(Calendar.MINUTE);
         int second = cal.get(Calendar.SECOND);
         float minuteRotate = minute * 6.0f;
-        float secondRotate = second * 6.0f - 120;
+        float secondRotate = second * 6.0f - 118.5f;
         float hourRotate = (hour % 12) * 30 + 30 * minuteRotate/ 360.0f -210.0f;
         boolean scaled = false;
         if (centerX*2 < mWidth || centerY*2 < mHeigh) {

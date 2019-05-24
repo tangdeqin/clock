@@ -179,5 +179,6 @@
 
     <!--The size for alarm_delete_back.xml  -->
     <dimen name="alarm_title_size">20sp</dimen>
+    <dimen name="timer_add_timer_font_size">18sp</dimen>
 
 </resources>

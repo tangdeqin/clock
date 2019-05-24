@@ -104,7 +104,7 @@ public class TimerItemFragment extends Fragment {
             /*if (timer.isPaused()) {
                 DataModel.getDataModel().resetOrDeleteTimer(timer, R.string.label_deskclock);
             } else*/
-            if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
+            if (timer.isRunning() || timer.isExpired() || timer.isMissed() || timer.isPaused()) {
                 DataModel.getDataModel().addTimerMinute(timer);
                 Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
 
@@ -125,8 +125,8 @@ public class TimerItemFragment extends Fragment {
         @Override
         public void onClick(View v) {
             final Timer timer = getTimer();
-            if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
-                DataModel.getDataModel().addTimerMinute(timer);
+            if (timer.isRunning() || timer.isExpired() || timer.isMissed() || timer.isPaused()) {
+                DataModel.getDataModel().addTimerFiveMinutes(timer);//modify by yeqing.lv for P10043669 on 2019-5-22
                 Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
 
                 final Context context = v.getContext();
@@ -145,8 +145,8 @@ public class TimerItemFragment extends Fragment {
         @Override
         public void onClick(View v) {
             final Timer timer = getTimer();
-            if (timer.isRunning() || timer.isExpired() || timer.isMissed()) {
-                DataModel.getDataModel().addTimerMinute(timer);
+            if (timer.isRunning() || timer.isExpired() || timer.isMissed() || timer.isPaused()) {
+                DataModel.getDataModel().addTimerTenMinutes(timer);//modify by yeqing.lv for P10043669 on 2019-5-22
                 Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
 
                 final Context context = v.getContext();

@@ -14,18 +14,23 @@
 
 package com.android.deskclock.timer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -154,6 +159,13 @@ public class ExpiredTimersActivity extends BaseActivity {
         mExpiredTimersView.removeCallbacks(mTimeUpdateRunnable);
     }
 
+    public int getWindowHeight() {
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int height = dm.heightPixels;
+        return height;
+    }
     /**
      * Create and add a new view that corresponds with the given {@code timer}.
      */
@@ -163,16 +175,10 @@ public class ExpiredTimersActivity extends BaseActivity {
         final int timerId = timer.getId();
         final TimerItem timerItem = (TimerItem)
                 getLayoutInflater().inflate(R.layout.timer_item, mExpiredTimersView, false);
+        timerItem.setMinimumHeight(getWindowHeight());
         // Store the timer id as a tag on the view so it can be located on delete.
         timerItem.setId(timerId);
         mExpiredTimersView.addView(timerItem);
-
-        // Hide the label hint for expired timers.
-        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 begin
-        /*final TextView labelView = (TextView) timerItem.findViewById(R.id.timer_label);
-        labelView.setHint(null);
-        labelView.setVisibility(TextUtils.isEmpty(timer.getLabel()) ? View.GONE : View.VISIBLE);*/
-        //remove timer label by yeqing.lv for XR7685084 on 2019-5-8 end
 
         // Add logic to the "Add 1 Minute" button.
         final View addMinuteButton = timerItem.findViewById(R.id.add_oneMin);
@@ -183,24 +189,24 @@ public class ExpiredTimersActivity extends BaseActivity {
                 DataModel.getDataModel().addTimerMinute(timer);
             }
         });
-        //add by yeqing.lv for XR7685084 on 2019-5-8 begin
+
         // Add logic to the "Add 5 Minute" button.
         final View addFiveMinuteButton = timerItem.findViewById(R.id.add_fiveMin);
-        addMinuteButton.setOnClickListener(new View.OnClickListener() {
+        addFiveMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Timer timer = DataModel.getDataModel().getTimer(timerId);
-                DataModel.getDataModel().addTimerMinute(timer);
+                DataModel.getDataModel().addTimerFiveMinutes(timer);
             }
         });
 
         // Add logic to the "Add 10 Minute" button.
         final View addTenMinuteButton = timerItem.findViewById(R.id.add_tenMin);
-        addMinuteButton.setOnClickListener(new View.OnClickListener() {
+        addTenMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Timer timer = DataModel.getDataModel().getTimer(timerId);
-                DataModel.getDataModel().addTimerMinute(timer);
+                DataModel.getDataModel().addTimerTenMinutes(timer);
             }
         });
         //add by yeqing.lv for XR7685084 on 2019-5-8 end

@@ -86,6 +86,7 @@ class RingtoneLoader extends AsyncTaskLoader<List<ItemAdapter.ItemHolder<Uri>>> 
 
         // Add the item holder for the Music heading.
         itemHolders.add(new HeaderHolder(R.string.your_sounds));
+        itemHolders.add(new HeaderLineHolder());
 
         // Add an item holder for each custom ringtone and also cache a pretty name.
         /// M: [ALPS03552747] Access  mCustomRingtones only if it is not null@{
@@ -100,6 +101,8 @@ class RingtoneLoader extends AsyncTaskLoader<List<ItemAdapter.ItemHolder<Uri>>> 
 
         // Add an item holder for the Ringtones heading.
         itemHolders.add(new HeaderHolder(R.string.device_sounds));
+
+        itemHolders.add(new HeaderLineHolder());
 
         // Add an item holder for the silent ringtone.
         itemHolders.add(new SystemRingtoneHolder(RINGTONE_SILENT, null));
